@@ -1,0 +1,27 @@
+---
+title: "Distribucion en el muestreo"
+format:
+  html:
+    code-fold: true
+  pdf:
+    toc: false
+    number-sections: true
+    colorlinks: true
+---
+
+\renewcommand{\chaptername}{Tema}
+\markboth{Mathieu Kessler: Métodos Estadísticos}{Mathieu Kessler: Métodos Estadísticos}
+\chapter{Muestreo y distribuciones muestrales}
+\markboth{Mathieu Kessler: Métodos Estadísticos}{Mathieu Kessler: Métodos Estadísticos}
+\section{Introducción}
+Consideramos un experimento aleatorio para el cual estamos dispuestos a escoger un modelo, posiblemente con uno o varios parámetros que tendremos que ajustar.\\
+{\it Ejemplos}
+\begin{itemize}
+\item Me interesa una moneda para tirar a cara o cruz. El experimento es ``Tirar la moneda'' y la variable $X$ corresponde al resultado, su distribución se describe como: $X$ puede tomar dos valores $c$ (Cara) o $+$ (Cruz) con las probabilidades: $\P[X=c]=p$ y $\P[X=+]=1-p.$ $p$ es por lo tanto la probabilidad de que salga cara, y es un parámetro de nuestro modelo. En el caso en que confiamos en que la moneda no está trucada, nuestro modelo considerará que $p=1/2$. Para sacar información sobre $p$ y comprobar en particular que la moneda no está trucada, repetiremos un cierto  número de veces el experimento.
+\item Para las próximas elecciones generales, queremos determinar la proporción de gente que tiene intención de ir a votar, es decir queremos estimar la tasa de participación. El censo electoral para España tiene unos 32 millones de personas. Es claramente imposible entrevistar a todas las personas del censo. En cambio realizaremos una encuesta, escogiendo al azar una muestra de unas 3000 personas entre el censo y preguntándoles si tienen intención de ir a votar.
+\item El índice de audiencias manda en la programación de televisión. Pero ¿cómo saben cuántos espectadores vieron un partido dado o un programa determinado? A mí nunca me han preguntado... En realidad, una encuesta se realiza de manera automática y continua: una empresa especializada llamada SOFRES (http://www.sofresam.com) ha escogido al azar unos 3300 hogares  que representan unas 10000 personas de entre un total de aprox. 39 500 000 espectadores potenciales. En cada uno de estos hogares, instala un aparato llamado ``audímetro'' que graba cuál es el programa que se está viendo en cada momento.
+\item Quiero conocer la concentración de un determinado producto en una solución. Pienso que es razonable que la distribución de los valores proporcionados por mi aparato de medición sea una normal con media $\mu$ y desviación típica $\sigma$ desconocidas. El centro de esta distribución, es decir $\mu$, será por lo tanto lo más representativo de la concentración que intento determinar.  Para estimar $\mu$, repetiré la medición varias veces. 
+\end{itemize}
+Pero surge una pregunta evidente:\\
+{\large  \bf Pregunta:} ¿Cómo sabemos que nuestra estimación es fiable? ¿Por qué limitándose a unas 3000 personas, se puede extropolar el resultado con confianza a una población de 30 millones? Además está claro que el resultado que obtengo depende de la muestra particular que haya escogido, si escojo otra  muestra me sale otro resultado. Este hecho se llama la variabilidad muestral.\smallskip
+
