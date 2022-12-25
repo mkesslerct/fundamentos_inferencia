@@ -11,27 +11,33 @@ format:
 
 # Introducción
 
-Estamos interesados en modelizar un fenómeno que presenta un aspecto aleatorio. Para plantear y contestar preguntas sobre probabilidades de sucesos, buscamos disponer de un modelo para la distribución de los valores de la variable de interés. Para ir construyendo nuestro conocimiento sobre esta distribución,  consideraremos una muestra de valores, que iremos recogiendo al repetir un experimento.
+Estamos interesados en modelizar un fenómeno que presenta un aspecto aleatorio. Para plantear y contestar preguntas sobre probabilidades de sucesos asociados, buscamos disponer de un modelo para la distribución de los valores de la variable de interés. Iremos construyendo nuestro conocimiento sobre esta distribución, al recopilar una muestra de valores, que iremos recogiendo al repetir un experimento.
 
 
 ## Ejemplos {.unnumbered}
-- Me interesa una moneda para tirar a cara o cruz, pero quiero asegurarme de que no está trucada. Para contestar a esta pregunta, planteo el modelo siguiente: si la variable $X$ recoge el resultado de experimento que consiste en tirar una vez la moneda, puede tomar los valores $c$ (Cara) o $+$ (Cruz) con las probabilidades: $\mathbb{P}[X=c]=p$ y $\mathbb{P}[X=+]=1-p.$ La cantidad $p$ es por lo tanto la probabilidad de que salga cara, y es un parámetro de nuestro modelo. En el caso en que confiamos en que la moneda no está trucada, el parámetro $p$ tomará el valor $1/2$. Para sacar información sobre $p$ y comprobar en particular que la moneda no está trucada, repetiremos un cierto  número de veces el experimento.
-
-- Para las próximas elecciones generales, queremos determinar la proporción de gente que tiene intención de ir a votar, es decir queremos estimar la tasa de participación. El censo electoral para España tiene unos 32 millones de personas. Es claramente imposible entrevistar a todas las personas del censo, pero puedo realizar una encuesta para conseguir una muestras de respuestas. Planteo por lo tanto un modelo simple correspondiente al experimento de escoger al azar a una persona censada: si $X$ es la respuesta a la pregunta "Tiene intención de ir a votar?", puede tomar dos valores "Sí" o "No". Llamo $p$ la tasa de intención de voto, es decir que $\mathbb{P}(X = ``S\'\i") = p$. Quiero estimar $p$, y lo haré repetiendo el experimento de escoger una persona al azar en el censo y preguntarle si tiene intención de ir a votar.
-
-- El índice de audiencias manda en la programación de televisión. Pero ¿cómo saben cuántos espectadores vieron un partido dado o un programa determinado? A mí nunca me han preguntado... En realidad, una encuesta se realiza de manera automática y continua: una empresa especializada llamada SOFRES (http://www.sofresam.com) ha escogido al azar unos 3300 hogares  que representan unas 10000 personas de entre un total de aprox. 39 500 000 espectadores potenciales. En cada uno de estos hogares, instala un aparato llamado ``audímetro'' que registra cuál es el programa que se está viendo en cada momento.
-- Quiero conocer la concentración de un determinado producto en una solución. Pienso que es razonable que la distribución de los valores proporcionados por mi aparato de medición sea una distribución normal con media $\mu$ y desviación típica $\sigma$ desconocidas. El centro de esta distribución, es decir $\mu$, será por lo tanto lo más representativo de la concentración que intento determinar.  Para estimar $\mu$, repetiré la medición varias veces. 
+- Dispongo de una moneda para tirar a cara o cruz, pero quiero asegurarme de que no está trucada. Para contestar a esta pregunta, planteo el modelo siguiente: si la variable $X$ recoge el resultado de experimento que consiste en tirar una vez la moneda, puede tomar los valores $c$ (Cara) o $+$ (Cruz) con las probabilidades: $\mathbb{P}[X=c]=p$ y $\mathbb{P}[X=+]=1-p.$ La cantidad $p$ es por lo tanto la probabilidad de que salga cara, y es un parámetro de nuestro modelo. En el caso en que confiamos en que la moneda no está trucada, el parámetro $p$ tomará el valor $1/2$. Para sacar información sobre $p$ y comprobar en particular que la moneda no está trucada, repetiremos un cierto número de veces el experimento.
+- Para las próximas elecciones generales, queremos determinar la proporción de gente que tiene intención de ir a votar, es decir queremos estimar la tasa de participación. El censo electoral para España tiene unos 32 millones de personas. Es claramente imposible entrevistar a todas las personas del censo, pero puedo realizar una encuesta para conseguir una muestras de respuestas. Planteo por lo tanto un modelo simple correspondiente al experimento de escoger al azar a una persona censada: si $X$ es la respuesta a la pregunta "Tiene intención de ir a votar?", puede tomar dos valores "Sí" o "No". Llamo $p$ la tasa de intención de voto, es decir que $\mathbb{P}(X = ``S\'i'') = p$. Quiero estimar $p$, y lo haré repetiendo el experimento de escoger una persona al azar en el censo y preguntarle si tiene intención de ir a votar.
+- El índice de audiencias manda en la programación de televisión. Pero ¿cómo saben cuántos espectadores vieron un partido dado o un programa determinado? A mí nunca me han preguntado... En realidad, una encuesta se realiza de manera automática y continua: una empresa especializada llamada Kantar media, [enlace a su página web](https://www.kantar.com/es), ha escogido al azar unos 6000 hogares  que representan unas 20000 personas de entre un total de más de 40 000 000 espectadores potenciales. En cada uno de estos hogares, instala un aparato llamado ``audímetro'' que registra cuál es el programa que se está viendo en cada momento.
+- Quiero conocer la concentración de un determinado producto en una solución. Pienso que un modelo razonable para la distribución de los valores proporcionados por mi aparato de medición sea una distribución normal con media $\mu$ y desviación típica $\sigma$ desconocidas. El centro de esta distribución, es decir $\mu$, será por lo tanto lo más representativo de la concentración que intento determinar.  Para estimar $\mu$, repetiré la medición varias veces. 
 
 Pero surge una pregunta evidente:
 
-**Pregunta** ¿Cómo sabemos que nuestra estimación es fiable? ¿Por qué limitándose a unas 3000 personas, se puede extropolar el resultado con confianza a una población de 30 millones? Además está claro que el resultado que obtengo depende de la muestra particular que haya escogido, si escojo otra  muestra me sale otro resultado. Este hecho se llama la variabilidad muestral.
+**Pregunta** ¿Cómo sabemos que nuestra estimación es fiable? ¿Por qué limitándose a unas 6000 personas, se puede extropolar el resultado con confianza a una población de 40 millones? Además está claro que el resultado que obtengo depende de la muestra particular que haya escogido, si hubiera escogido otra muestra, habría obtenido otro resultado. Este hecho se llama la variabilidad muestral.
 
 Para contestar a esta pregunta debo procurar estudiar la variabilidad muestral, es decir conocer la distribución de los valores que toma una cantidad calculada a partir de una muestra concreta, como la proporción por ejemplo, respecto a todas las muestras que podría extraer. Si esta distribución presenta poca dispersión, tendré bastante confianza en que el proceso de estimación es poco sensible a la muestra concreta escogida, puesto que la probabilidad de que otra muestra haya arrojado un valor muy distinto será pequeña.
 
 ::: {.callout-note appearance="simple"}
 
 ## Inferir
-Inferir sobre un parámetro consiste precisamente en sacar información sobre su valor a partir de una muestra de valores 
-Toda la teoría desarrollada acerca de los sondeos, del control de calidad, pero también del diseño de experimentos se basa en  
+Inferir sobre un parámetro presente en el modelo de distribución de una variable consiste precisamente en sacar información sobre su valor a partir de una muestra de valores de la variable. 
+
+Toda la teoría desarrollada acerca de los sondeos, del control de calidad, del diseño de experimentos, y en realidad, de toda la teoría estadistica se basa de manera esencial en el estudio de la variabilidad muestral de cantidades calculadas a partir de una muestra.
 
 :::
+
+## Muestra aleatoria
+Como primer paso en el estudio de la distribución en el muestreo, formalizamos el concepto de muestra aleatoria simple como la variable multidimensional asociada a la repetición del experimento simple de observar un valor.
+
+<!-- \begin{definition} -->
+<!-- Consideramos un experimento aleatorio y una variable aleatoria $X$ asociada. Consideramos el experimento que consiste en repetir el experimento simple $n$ veces -->
+<!-- \end{definition} -->

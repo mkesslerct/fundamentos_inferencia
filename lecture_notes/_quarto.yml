@@ -7,8 +7,6 @@ book:
   date: "12/23/2022"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
     - 01-distribucion_en_el_muestreo.qmd
     - references.qmd
 
