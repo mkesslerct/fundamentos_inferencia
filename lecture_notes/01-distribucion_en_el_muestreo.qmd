@@ -42,8 +42,14 @@ Toda la teoría desarrollada acerca de los sondeos, del control de calidad, del 
 :::
 
 ## Muestra aleatoria
-Como primer paso en el estudio de la distribución en el muestreo, formalizamos el concepto de muestra aleatoria simple como la variable multidimensional asociada a la repetición del experimento simple de observar un valor.
+Como primer paso en el estudio de la distribución en el muestreo, formalizamos el concepto de muestra aleatoria simple como la variable multidimensional asociada a la repetición de un experimento simple.
 
 \begin{definition}
-Consideramos un experimento aleatorio y una variable aleatoria $X$ asociada. Consideramos el experimento que consiste en repetir el experimento simple $n$ veces
+Sea una distribución $f$. Consideramos $n$ variables aleatorias independientes $X_1, X_2, \ldots, X_n$, que tengan cada una la misma distribución $f$. La variable aleatoria multidimensional $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$.
 \end{definition}
+
+La situación de modelización más habitual donde consideraremos una muestra aleatoria simple corresponde a la repetición $n$ veces  de manera independiente de un experimento simple al que está asociado una variable $X$ con distribución $f$. Si llamamos $X_1, X_2, \ldots, X_n$ a las variables que recogen los valores de $X$ obtenidos en las $n$ repeticiones, $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$.
+
+Es el caso del ejemplo descrito en la sección anterior que consiste en tirar $n$ veces una moneda. Si $X_1, X_2, \ldots, X_n$ denotan los valores obtenidos (+ ó c),  $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, la distribución de $X$ definida como $\mathbb{P}[X=c]=p$ y $\mathbb{P}[X=+]=1-p.$
+
+En cambio, si consideramos el ejemplo de una encuesta para estimar la tasa de participación, se trata de una extracción sin reemplazo. Si $N$ es el tamaño del censo y  $X_1, X_2, \ldots, X_n$ representan las respuestas obtenidas al preguntar a personas de manera consecutiva, la probabilidad $\mathbb{P}(X_i = Si)$ se calcula como  $\frac{1}{N - (i - 1)} p$.
