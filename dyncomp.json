@@ -1,0 +1,4 @@
+{
+    "render": "quarto render lecture_notes",
+    "preview": "quarto preview lecture_notes"
+}
