@@ -36,7 +36,10 @@ Para convencernos de que este buen comportamiento es lo esperable para muestras 
 
 ```{r}
 library(purrr)
-p_muestras = map_dbl(1:10000, ~ mean(sample(poblacion, 20000, replace = FALSE)))
+p_muestras = map_dbl(
+    1:10000,
+    ~ mean(sample(poblacion, 20000, replace = FALSE))
+)
 head(p_muestras)
 ```
 Podemos ahora representar un histograma de las 10000 proporciones muestrales obtenidas y calcular algún percentil asociado.
@@ -58,7 +61,7 @@ hist(
 ```
 Comprobamos en el histograma que todas las muestras simuladas llevan a una estimación de la proporción muy próxima a la proporción poblacional. De hecho, `r round(100 * ((fdae <- ecdf(p_muestras))(0.71) - fdae(0.69)), 1)`% de las muestras presentan un error menor de 1 punto respecto al valor poblacional y `r round(100 * ((fdae <- ecdf(p_muestras))(0.705) - fdae(0.695)), 1)`% de las muestras un error menor que medio punto.
 
-En conclusión, este estudio de simulación nos lleva a tener confianza en la precisión de nuestra estimación si extraemos una muestra de 20000 personas para aproximar la proporción en una población de 17000000 personas. Exploraremos esta misma idea de estudiar la "Distribución en el muestreo" no solamente a través de simulaciones sino por la obtención de resultados teóricos manipulando probabilidades. 
+En conclusión, este estudio de simulación nos lleva a tener confianza en la precisión de nuestra estimación si extraemos una muestra de 20000 personas para aproximar la proporción en una población de 17000000 personas. En este tema exploraremos esta misma idea de estudiar la "distribución en el muestreo" no solamente a través de simulaciones sino gracias a la obtención de resultados teóricos manipulando probabilidades. 
 
 ::: {.callout-note appearance="simple"}
 ## Inferir
@@ -106,3 +109,15 @@ Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, consideramo
 - Si $\varphi_f$ denota la función característica de $f$, es decir $\forall t$, $\varphi_f(t)= \mathbb{E}[e^{itX}]$ donde $X$ es una variable con distribución $f$,
 $$ \varphi_{\bar{X}_n}(t)=\mathbb{E}[e^{it\bar{X}_n}]=\left(\varphi_f(t/n)\right)^n.$$ {#eq-caracteristica-suma}
 :::
+
+::: {.proof}
+La esperanza de $\bar{X}$ se obtiene usando la propiedad de linealidad de la esperanza, mientras que para su varianza, se usa el hecho de que la varianza de la suma de variables independientes es la suma de sus varianzas.
+:::
+
+::: {.callout-important}
+## Nota
+- Es muy destacable que esos resultados son ciertos sea cual sea la distribución $f$: el centro de los valores de la media muestral coincide con el centro de los valores de la distribución $f$ de la cual se muestrea, mientras que su dispersión, medida por su desviación típica es raiz cuadrada de $n$ más pequeña que la dispersión en la población.
+- Si consideramos el experimento de realizar la medición de una cantidad usando un aparato, la variable $X$ denota el valor proporcionado por el aparato, su distribución es $f$. Si el aparato es exacto, el centro de los valores de $f$ coincide con la cantidad que perseguimos determinar. La medición siempre está acompañada de un error, y este error es aleatorio, pero si el aparato está bien calibrado, $\mu_f$ coincide con la cantidad exacta. Si el aparato es preciso, presenta una buena reproducibilidad de las mediciones, es decir que $\sigma_f$ es pequeña. Se puede encontrar en la figura @fig-diana una analogía de la medición con el disparo a una diana. Por la proposición @prop-distmas, deducimos que, si repetimos la medición varias veces y calculamos la media de los valores obtenidos, conseguimos mejorar la precisión (disminuir la dispersión) de nuestro procedimiento. 
+:::
+
+![Analogía de la medición con una diana](./figures/dianas.jpg){#fig-diana}
