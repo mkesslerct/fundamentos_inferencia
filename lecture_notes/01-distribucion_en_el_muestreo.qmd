@@ -6,16 +6,59 @@ Estamos interesados en modelizar un fenómeno que presenta un aspecto aleatorio.
 
 
 ### Ejemplos {.unnumbered}
-- Dispongo de una moneda para tirar a cara o cruz, pero quiero asegurarme de que no está trucada. Para contestar a esta pregunta, planteo el modelo siguiente: si la variable $X$ recoge el resultado de experimento que consiste en tirar una vez la moneda, puede tomar los valores $c$ (Cara) o $+$ (Cruz) con las probabilidades: $\mathbb{P}[X=c]=p$ y $\mathbb{P}[X=+]=1-p.$ La cantidad $p$ es por lo tanto la probabilidad de que salga cara, y es un parámetro de nuestro modelo. En el caso en que confiamos en que la moneda no está trucada, el parámetro $p$ tomará el valor $1/2$. Para sacar información sobre $p$ y comprobar en particular que la moneda no está trucada, repetiremos un cierto número de veces el experimento.
+- Disponemos de una moneda para tirar a cara o cruz, pero queremos asegurarme de que no está trucada. Para contestar a esta pregunta, planteamos el modelo siguiente: si la variable $X$ recoge el resultado de experimento que consiste en tirar una vez la moneda, puede tomar los valores $c$ (Cara) o $+$ (Cruz) con las probabilidades: $\mathbb{P}[X=c]=p$ y $\mathbb{P}[X=+]=1-p.$ La cantidad $p$ es por lo tanto la probabilidad de que salga cara, y es un parámetro de nuestro modelo. En el caso en que confiamos en que la moneda no está trucada, el parámetro $p$ tomará el valor $1/2$. Para sacar información sobre $p$ y comprobar en particular que la moneda no está trucada, repetiremos un cierto número de veces el experimento.
 - Para las próximas elecciones generales, queremos determinar la proporción de gente que tiene intención de ir a votar, es decir queremos estimar la tasa de participación. El censo electoral para España tiene unos 35 millones de personas. Es claramente imposible entrevistar a todas las personas del censo, pero puedo realizar una encuesta para conseguir una muestras de respuestas. Planteamos por lo tanto un modelo simple correspondiente al experimento de escoger al azar a una persona censada: si $X$ es la respuesta a la pregunta "Tiene intención de ir a votar?", puede tomar dos valores 1 ó 0 que codifican las respuestas "Sí" o "No" respectivamente. Llamamos $p$ la tasa de intención de voto, es decir que $\mathbb{P}(X = 1) = p$. Quieremos estimar $p$, y lo haremos repetiendo el experimento de escoger una persona al azar en el censo y preguntarle si tiene intención de ir a votar.
 - El índice de audiencias manda en la programación de televisión. Pero ¿cómo saben cuántos espectadores vieron un partido dado o un programa determinado? Claramente, no preguntan a todos los potenciales espectadores. En realidad, una encuesta se realiza de manera automática y continua: una empresa especializada llamada Kantar media, [enlace a su página web](https://www.kantar.com/es), ha escogido al azar unos 6000 hogares  que representan unas 20000 personas de entre un total de más de 40 000 000 espectadores potenciales. En cada uno de estos hogares, instala un aparato llamado ``audímetro'' que registra cuál es el programa que se está viendo en cada momento.
-- Quiero conocer la concentración de un determinado producto en una solución. Pienso que un modelo razonable para la distribución de los valores proporcionados por mi aparato de medición sea una distribución normal con media $\mu$ y desviación típica $\sigma$ desconocidas. El centro de esta distribución, es decir $\mu$, será por lo tanto lo más representativo de la concentración que intento determinar.  Para estimar $\mu$, repetiré la medición varias veces. 
+- Queremos conocer la concentración de un determinado producto en una solución. Pensamos que un modelo razonable para la distribución de los valores proporcionados por nuestro aparato de medición sea una distribución normal con media $\mu$ y desviación típica $\sigma$ desconocidas. El centro de esta distribución, es decir $\mu$, será por lo tanto lo más representativo de la concentración que intento determinar.  Para estimar $\mu$, repetiremos la medición varias veces. 
 
 Pero surge una pregunta evidente:
 
-**Pregunta** ¿Cómo sabemos que nuestra estimación es fiable? ¿Por qué limitándose a unas 20000 personas, se puede extropolar el resultado con confianza a una población de 40 millones? Además está claro que el resultado que obtengo depende de la muestra particular que haya escogido, si hubiera escogido otra muestra, habría obtenido otro resultado. Este hecho se llama la variabilidad muestral.
+**Pregunta** ¿Cómo sabemos que nuestra estimación es fiable? ¿Por qué limitándose a unas 20000 personas, se puede extropolar el resultado con confianza a una población de decenas de millones? Además está claro que el resultado que obtengo depende de la muestra particular que haya escogido, si hubiera escogido otra muestra, habría obtenido otro resultado. Este hecho se llama la variabilidad muestral.
 
-Para contestar a esta pregunta debo procurar estudiar la variabilidad muestral, es decir conocer la distribución de los valores que toma una cantidad calculada a partir de una muestra concreta, como la proporción por ejemplo, respecto a todas las muestras que podría extraer. Si esta distribución presenta poca dispersión, tendré bastante confianza en que el proceso de estimación es poco sensible a la muestra concreta escogida, puesto que la probabilidad de que otra muestra haya arrojado un valor muy distinto será pequeña.
+Para contestar a esta pregunta debemos procurar estudiar la variabilidad muestral, es decir conocer la distribución de los valores que toma una cantidad calculada a partir de una muestra concreta, como la proporción por ejemplo, respecto a todas las muestras que podría extraer. Si esta distribución presenta poca dispersión, tendremos bastante confianza en que el proceso de estimación es poco sensible a la muestra concreta escogida, puesto que la probabilidad de que otra muestra haya arrojado un valor muy distinto será pequeña.
+
+Una manera de realizar este estudio de la variabilidad muestral es a través de simulaciones realizadas con el ordenador. Podemos simular la extracción repetida de muestras de tamaño 20000 de una población. Supongamos por ejemplo, que consideramos la retransmisión en España de la final de la copa del Mundo 2022 que consiguió una cuota de casí 70%, entre los 17000000 espectadores en ese momento, fuente  [noticia en rtve.es](https://www.rtve.es/rtve/20221219/audiencias-gran-final-mundial-catar/2412248.shtml). Supongamos que la proporción de espectadores que vieron la final fue realmente 0. 7. Vamos a definir un vector con 17000000 elementos de los cuales el 70%, es decir 11900000, son "1"s, y el 30%, es decir 5100000, son "0"s. Este vector representará la "población" de todos los espectadores en este momento. Los "1"s representan las personas que vieron la final por la tele.  Escogeremos al azar una muestra de 20000 elementos entre los elementos del vector población y calcularemos la proporción de "1"s en esta muestra. Comprobaremos si está cerca de la proporción de "1"s en la población, que vale 0.7.
+```{r}
+poblacion = c(rep(1, 11900000), rep(0, 5100000))
+set.seed(314159)
+p_muestra =  mean(sample(poblacion, 20000, replace = FALSE))
+p_muestra
+```
+Para esta muestra concreta, la proporción muestral de "1"s es muy próxima a la proporción poblacional, por lo que nuestra estimación usando una muestra de "solo" 20000 personas nos da muy buen resultado.
+
+::: {.callout-note appearance="simple"}
+## Nota
+- En el trozo de código anterior, hemos usado la función `set.seed` que permite fijar la semilla de la secuencia de números pseudoaleatorios que se van a generar. Admite un número como argumento, que podemos escoger como una cantidad fácil de recordar. El fijar la semilla permite reproducir simulaciones aunque impliquen la generación de números aleatorios.
+- Para calcular la proporción muestral de "1"s, hemos usado la media muestral, puesto que la suma de los valores en la muestra es igual al número de "1"s que presenta.
+:::
+
+Para convencernos de que este buen comportamiento es lo esperable para muestras de este tamaño, vamos a repetir muchas veces (10000 veces por ejemplo), la extracción de una muestra de 20000 personas en la población. Para hacerlo, podríamos repetir el código anterior en un bucle `for`, pero vamos a aprovechar la librería `purrr` del "tidyverse", que permite aplicar una función a los elementos de una lista o de un vector. 
+
+```{r}
+library(purrr)
+p_muestras = map_dbl(1:10000, ~ mean(sample(poblacion, 20000, replace = FALSE)))
+head(p_muestras)
+```
+Podemos ahora representar un histograma de las 10000 proporciones muestrales obtenidas y calcular algún percentil asociado.
+
+```{r}
+#| label: fig-histograma-phat
+#| fig-cap: Histograma de los valores de la proporción muestral para las 10000 muestras extraidas.
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+hist(
+    p_muestras,
+    col = "blue",
+    xlab = "Proporción muestral",
+    ylab = "Frecuencia",
+    main = "",
+    xlim = c(0.6, 0.8)
+)
+```
+Comprobamos en el histograma que todas las muestras simuladas llevan a una estimación de la proporción muy próxima a la proporción poblacional. De hecho, `r round(100 * ((fdae <- ecdf(p_muestras))(0.71) - fdae(0.69)), 1)`% de las muestras presentan un error menor de 1 punto respecto al valor poblacional y `r round(100 * ((fdae <- ecdf(p_muestras))(0.705) - fdae(0.695)), 1)`% de las muestras un error menor que medio punto.
+
+En conclusión, este estudio de simulación nos lleva a tener confianza en la precisión de nuestra estimación si extraemos una muestra de 20000 personas para aproximar la proporción en una población de 17000000 personas. Exploraremos esta misma idea de estudiar la "Distribución en el muestreo" no solamente a través de simulaciones sino por la obtención de resultados teóricos manipulando probabilidades. 
 
 ::: {.callout-note appearance="simple"}
 ## Inferir
@@ -49,17 +92,17 @@ Si $N_S$ es el número de personas en el censo que tienen intención de ir a vot
 $$\mathbb{P}(X_i = 1) = \frac {N_S - \sum_{1\leq j< i}x_j} {N - (i - 1)}.$$
 :::
 
-## Suma de las variables de una muestra.
+## Media de las variables de una muestra.
 
-Muchas de las cantidades relevantes asociadas a una muestra implican la suma de las variables, empezaremos por lo tanto por estudiar qué podemos decir sobre la distribución muestral de la suma de las variables de una muestra, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer.
+Sin duda, entre las cantidades más relevantes asociadas a una muestra destaca la media muestral. Empezaremos por lo tanto por estudiar qué podemos decir sobre su distribución muestral, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer.
 
 ::: {#prp-distmas}
-Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, consideramos su suma $S_n = \sum_{i = 1, \ldots, n} X_i$, se cumple:
+Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
 
 - Si $\mu_f$ es la esperanza de la distribución $f$, 
-  $$\mathbb{E}(S_n)= n\cdot \mu_f.$$
+  $$\mathbb{E}(\bar{X}_n)=  \mu_f.$$
 - Si $\sigma_f^2$ es la varianza de la distribución $f$, 
-  $$Var(S_n)= n\cdot \sigma_f^2.$$
+  $$Var(\bar{X}_n)=  \sigma_f^2/n.$$
 - Si $\varphi_f$ denota la función característica de $f$, es decir $\forall t$, $\varphi_f(t)= \mathbb{E}[e^{itX}]$ donde $X$ es una variable con distribución $f$,
-$$ \varphi_{S_n}(t)=\mathbb{E}[e^{itS_n}]=\left(\varphi_f(t)\right)^n.$$ {#eq-caracteristica-suma}
+$$ \varphi_{\bar{X}_n}(t)=\mathbb{E}[e^{it\bar{X}_n}]=\left(\varphi_f(t/n)\right)^n.$$ {#eq-caracteristica-suma}
 :::

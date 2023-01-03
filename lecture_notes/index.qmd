@@ -1,5 +1,7 @@
-# Preface {.unnumbered}
+# Prólogo {.unnumbered}
 
-This is a Quarto book.
+Este libro recoge el material de clase de la asignatura "Fundamentos de inferencia" impartida en el segundo curso de Grado en Ingeniería de Ciencia de Datos por Félix Bulzunce (Universidad de Murcia) y Mathieu Kessler (Universidad Politécnica de Cartagena) a partir del curso 2023/2024.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+Todo el material ha sido elaborado como un libro Quarto, para más información puede visitar <https://quarto.org/docs/books>. El código correspondiente está disponible en un [repositorio](https://github.com/mkesslerct/fundamentos_inferencia) de Github, con licencia [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+Los autores agradecen sugerencias y correcciones de errores que se pueden enviar realizando un Pull-Request al repositorio.
