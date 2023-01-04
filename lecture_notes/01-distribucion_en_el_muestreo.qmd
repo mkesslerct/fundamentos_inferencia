@@ -1,5 +1,6 @@
 # Distribución en el muestreo
 
+
 ## Introducción
 
 Estamos interesados en modelizar un fenómeno que presenta un aspecto aleatorio. Para plantear y contestar preguntas sobre probabilidades de sucesos asociados, buscamos disponer de un modelo para la distribución de los valores de la variable de interés. Iremos construyendo nuestro conocimiento sobre esta distribución al recopilar una muestra de valores, que iremos recogiendo al repetir un experimento.
@@ -97,10 +98,10 @@ $$\mathbb{P}(X_i = 1) = \frac {N_S - \sum_{1\leq j< i}x_j} {N - (i - 1)}.$$
 
 ## Media de las variables de una muestra.
 
-Sin duda, entre las cantidades más relevantes asociadas a una muestra destaca la media muestral. Empezaremos por lo tanto por estudiar qué podemos decir sobre su distribución muestral, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer.
+Sin duda, entre las cantidades más relevantes asociadas a una muestra destaca la media muestral. Empezaremos por lo tanto por estudiar qué podemos decir sobre su distribución muestral, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer. Como primer paso, la obtención de su esperanza y varianza es sencilla y nos proporciona información valiosa sobre su centro y su dispersión:
 
 ::: {#prp-distmas}
-Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
+Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, que admite tiene esperanza y varianza, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
 
 - Si $\mu_f$ es la esperanza de la distribución $f$, 
   $$\mathbb{E}(\bar{X}_n)=  \mu_f.$$
@@ -116,8 +117,60 @@ La esperanza de $\bar{X}$ se obtiene usando la propiedad de linealidad de la esp
 
 ::: {.callout-important}
 ## Nota
-- Es muy destacable que esos resultados son ciertos sea cual sea la distribución $f$: el centro de los valores de la media muestral coincide con el centro de los valores de la distribución $f$ de la cual se muestrea, mientras que su dispersión, medida por su desviación típica es raiz cuadrada de $n$ más pequeña que la dispersión en la población.
-- Si consideramos el experimento de realizar la medición de una cantidad usando un aparato, la variable $X$ denota el valor proporcionado por el aparato, su distribución es $f$. Si el aparato es exacto, el centro de los valores de $f$ coincide con la cantidad que perseguimos determinar. La medición siempre está acompañada de un error, y este error es aleatorio, pero si el aparato está bien calibrado, $\mu_f$ coincide con la cantidad exacta. Si el aparato es preciso, presenta una buena reproducibilidad de las mediciones, es decir que $\sigma_f$ es pequeña. Se puede encontrar en la figura @fig-diana una analogía de la medición con el disparo a una diana. Por la proposición @prop-distmas, deducimos que, si repetimos la medición varias veces y calculamos la media de los valores obtenidos, conseguimos mejorar la precisión (disminuir la dispersión) de nuestro procedimiento. 
+- Es muy destacable que esos resultados son ciertos sea cual sea la distribución $f$: el centro de los valores de la media muestral coincide con el centro de los valores de la distribución $f$ de la cual se muestrea, mientras que su dispersión, medida por su desviación típica, es raiz cuadrada de $n$ más pequeña que la dispersión en la población.
+- Si consideramos el experimento de realizar la medición de una cantidad usando un aparato, la variable $X$ denota el valor proporcionado por el aparato, su distribución es $f$. Si el aparato es exacto, el centro de los valores de $f$ coincide con la cantidad que perseguimos determinar. La medición siempre está acompañada de un error, y este error es aleatorio, pero si el aparato está bien calibrado, $\mu_f$ coincide con la cantidad exacta. Si el aparato es preciso, presenta una buena reproducibilidad de las mediciones, es decir que $\sigma_f$ es pequeña. Se puede encontrar en la figura @fig-diana una analogía de la medición con el disparo a una diana. Por la proposición @prp-distmas, deducimos que, si repetimos la medición varias veces y calculamos la media de los valores obtenidos, conseguimos mejorar la precisión (disminuir la dispersión) de nuestro procedimiento. 
 :::
 
 ![Analogía de la medición con una diana](./figures/dianas.jpg){#fig-diana}
+
+## Varianza muestral
+Como medida de la dispersión de una muestra, es útil considerar la varianza muestral que definimos a continuación:
+
+::: {#def-varianzamuestral}
+Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, definimos la varianza muestral $S_n^2$ como
+$$ S_n^2 = \frac 1 {n - 1} \sum_{i = 1}^n \left(X_i - \bar{X}_n\right)^2.$$
+Es sencillo demostrar la fórmula alternativa para $\bar{S}_n^2$:
+$$S_n^2 = \frac n {n - 1} \left(\bar{X^2}_n - (\bar{X}_n)^2\right),$$ 
+donde $\overline{X^2}_n= \frac 1 n \sum_{1\leq i \leq n} X_i^2$ es la media de los cuadrados de los valores de la muestra. 
+:::
+Antes de obtener la distribución de la varianza muestral en el caso de una distribución normal, podemos obtener su esperanza, para cualquier distribución $f$ con varianza finita. 
+
+::: {#prp-espvar}
+Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$ con varianza $\sigma_f^2$, 
+$$\mathbb{E}[S_n^2] = \sigma_f^2.$$
+:::
+
+::: {.proof}
+Escribimos 
+$$\mathbb{E}[S_n^2] =\frac 1 {n - 1} \sum_{i = 1}^n \mathbb{E}\left[(X_i - \bar{X}_n)^2\right]= \frac 1 {n-1}\sum_{i = 1}^n \mathbb{E}\left[\left(X_i -\mu_f - \frac 1 n\sum_{1\leq j\leq n}(X_j -\mu_f)\right)^2\right].$$ 
+Ahora, 
+$$\left(X_i -\mu_f - \frac 1 n\sum_{1\leq j\leq n}(X_j -\mu_f)\right)^2 = \left(\frac {n - 1} n (X_i - \mu_f) - \frac 1 n\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)\right)^2$$
+Al desarrollar este cuadrado nos encontramos con $(\frac {n - 1} n (X_i - \mu_f))^2 + \frac 1 n^2\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)^2$ y con productos de la forma $(\frac {n - 1} n (X_i - \mu_f)\frac 1 n(X_j -\mu_f))$, para $j\neq i$. Todos estos últimos productos tienen esperanza nula porque las variables $X_i$ y $X_j$ son independientes.  
+
+Deducimos que 
+\begin{align}
+\mathbb{E}[S_n^2] &=& \frac 1 {n - 1} \sum_{i = 1}^n \mathbb{E}\left[(\frac {n - 1} n (X_i - \mu_f))^2+ \frac 1 {n^2}\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)^2\right]\\ 
+ &=& \frac 1 {n - 1} n\left(\frac {(n -1)^2}{n^2}+ \frac {n - 1} {n^2}\right)\sigma_f^2\\ 
+ &=& \sigma_f^2.
+\end{align}
+:::
+
+### Distribución de la media muestral para una m.a.s de una distribución normal.
+
+
+En la subsección anterior, hemos caracterizado la media y la desviación típica de la distribución de los valores de la media muestral $\bar{X}_n$. Hay que enfatizar el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución de $X$. ¿Podemos decir algo más sobre la distribución de los valores de $\bar{X}_n$, ahora que sabemos cuáles son su centro y su dispersión?
+
+Si hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ y consideramos una muestra aleatoria simple de $X$,ldots+X_n$ sigue también una distribución normal. Se cumple por lo tanto 
+
+::: {#prp-distxbar}
+Si $X\sim \mathcal{N}(\mu,\sigma^2)$, y si $\bar{X}_n$ es la media muestral basada en una muestra aleatoria simple de la distribución de $X$, 
+$$\bar{X}_n\sim \mathcal{N}(\mu,\frac {\sigma^2} n),$$
+o, de manera equivalente,
+$$\frac{\bar{X}_n-\mu} {\sigma/\sqrt{n}} \sim \mathcal{N}(0,1).$$
+:::
+
+Como ejemplo, consideremos un aparato de medición que  proporciona valores que se distribuyen según una Normal, con una media de 120 y una desviación típica de 12. Por la propiedad de la distribución Normal, el 95\% de los valores están entre $\mu-2\sigma$ y $\mu-2\sigma$, es decir entre 96 y 144. En cambio, si repito 9 veces la medición y proporciono la media de estas nueve mediciones, el 95\% de los valores que obtendría con este procedimiento se encontrarían entre  $\mu-2\sigma/\sqrt{n}$ y $\mu-2\sigma/\sqrt{n}$, es decir entre 112 y 128, lo que implica una precisión mucho mayor.
+
+En una subsección posterior, veremos que este resultado es válido asíntoticamente (cuando $n$ tiende hacia $+\infty$), para una clase muy grande de distribuciones $f$ de $X$.
+
+## Varianza muestral
