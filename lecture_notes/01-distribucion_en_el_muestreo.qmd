@@ -155,20 +155,26 @@ Deducimos que
 \end{align}
 :::
 
-### Distribución de la media muestral para una m.a.s de una distribución normal.
+Deducimos de la @prp-espvar que el centro de los valores de la distribución de la varianza muestral coincide con la varianza de $f$, que llamamos también la varianza "poblacional".
+
+## Distribución de la media y de la varianza muestrales para una m.a.s de una distribución normal.
 
 
-En la subsección anterior, hemos caracterizado la media y la desviación típica de la distribución de los valores de la media muestral $\bar{X}_n$. Hay que enfatizar el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución de $X$. ¿Podemos decir algo más sobre la distribución de los valores de $\bar{X}_n$, ahora que sabemos cuáles son su centro y su dispersión?
-
-Si hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ y consideramos una muestra aleatoria simple de $X$,ldots+X_n$ sigue también una distribución normal. Se cumple por lo tanto 
+En las secciones anteriores, hemos caracterizado la esperanza y la varianza de la distribución de los valores de la media muestral $\bar{X}_n$ así como la esperanza de la varianza muestral $S^2_n$. Es destacable el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución $f$ de $X$. ¿Podemos decir algo más sobre la distribución de estos estadísticos si asumimos un modelo concreto para $f$? En el caso en que hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ somos capaces de caracterizar con detalles la distribución muestral de $\bar{X}_n$ y de $S^2_n$$, e incluso obtener un resultado sobre su distribución conjunta. La siguiente proposición establecer resultados de gran importancia para la teoría de la inferencia.
 
 ::: {#prp-distxbar}
-Si $X\sim \mathcal{N}(\mu,\sigma^2)$, y si $\bar{X}_n$ es la media muestral basada en una muestra aleatoria simple de la distribución de $X$, 
+Consideramos una muestra aleatoria simple de una distribución normal $\mathcal{N}(\mu,\sigma^2)$, $\bar{X}_n$ es su media muestral y $S^2_n$ la varianza muestral, se cumple
+1. $\bar{X}_n$ y $S^2_n$ son dos v.a. independientes. 
+2. 
 $$\bar{X}_n\sim \mathcal{N}(\mu,\frac {\sigma^2} n),$$
 o, de manera equivalente,
 $$\frac{\bar{X}_n-\mu} {\sigma/\sqrt{n}} \sim \mathcal{N}(0,1).$$
+3. $(n - 1)S_n^2/sigma^2$ sigue una ji-cuadrado con $n - 1$ grados de libertad.
 :::
 
+::: {.proof}
+
+:::
 Como ejemplo, consideremos un aparato de medición que  proporciona valores que se distribuyen según una Normal, con una media de 120 y una desviación típica de 12. Por la propiedad de la distribución Normal, el 95\% de los valores están entre $\mu-2\sigma$ y $\mu-2\sigma$, es decir entre 96 y 144. En cambio, si repito 9 veces la medición y proporciono la media de estas nueve mediciones, el 95\% de los valores que obtendría con este procedimiento se encontrarían entre  $\mu-2\sigma/\sqrt{n}$ y $\mu-2\sigma/\sqrt{n}$, es decir entre 112 y 128, lo que implica una precisión mucho mayor.
 
 En una subsección posterior, veremos que este resultado es válido asíntoticamente (cuando $n$ tiende hacia $+\infty$), para una clase muy grande de distribuciones $f$ de $X$.
