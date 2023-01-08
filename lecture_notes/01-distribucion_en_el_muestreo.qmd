@@ -100,7 +100,7 @@ $$\mathbb{P}(X_i = 1) = \frac {N_S - \sum_{1\leq j< i}x_j} {N - (i - 1)}.$$
 
 Sin duda, entre las cantidades más relevantes asociadas a una muestra destaca la media muestral. Empezaremos por lo tanto por estudiar qué podemos decir sobre su distribución muestral, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer. Como primer paso, la obtención de su esperanza y varianza es sencilla y nos proporciona información valiosa sobre su centro y su dispersión:
 
-::: {#prp-distmas}
+::: {#prp-espvarxbar}
 Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, que admite tiene esperanza y varianza, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
 
 - Si $\mu_f$ es la esperanza de la distribución $f$, 
@@ -118,7 +118,7 @@ La esperanza de $\bar{X}$ se obtiene usando la propiedad de linealidad de la esp
 ::: {.callout-important}
 ## Nota
 - Es muy destacable que esos resultados son ciertos sea cual sea la distribución $f$: el centro de los valores de la media muestral coincide con el centro de los valores de la distribución $f$ de la cual se muestrea, mientras que su dispersión, medida por su desviación típica, es raiz cuadrada de $n$ más pequeña que la dispersión en la población.
-- Si consideramos el experimento de realizar la medición de una cantidad usando un aparato, la variable $X$ denota el valor proporcionado por el aparato, su distribución es $f$. Si el aparato es exacto, el centro de los valores de $f$ coincide con la cantidad que perseguimos determinar. La medición siempre está acompañada de un error, y este error es aleatorio, pero si el aparato está bien calibrado, $\mu_f$ coincide con la cantidad exacta. Si el aparato es preciso, presenta una buena reproducibilidad de las mediciones, es decir que $\sigma_f$ es pequeña. Se puede encontrar en la figura @fig-diana una analogía de la medición con el disparo a una diana. Por la proposición @prp-distmas, deducimos que, si repetimos la medición varias veces y calculamos la media de los valores obtenidos, conseguimos mejorar la precisión (disminuir la dispersión) de nuestro procedimiento. 
+- Si consideramos el experimento de realizar la medición de una cantidad usando un aparato, la variable $X$ denota el valor proporcionado por el aparato, su distribución es $f$. Si el aparato es exacto, el centro de los valores de $f$ coincide con la cantidad que perseguimos determinar. La medición siempre está acompañada de un error, y este error es aleatorio, pero si el aparato está bien calibrado, $\mu_f$ coincide con la cantidad exacta. Si el aparato es preciso, presenta una buena reproducibilidad de las mediciones, es decir que $\sigma_f$ es pequeña. Se puede encontrar en la figura @fig-diana una analogía de la medición con el disparo a una diana. Por la @prp-espvarxbar, deducimos que, si repetimos la medición varias veces y calculamos la media de los valores obtenidos, conseguimos mejorar la precisión (disminuir la dispersión) de nuestro procedimiento. 
 :::
 
 ![Analogía de la medición con una diana](./figures/dianas.jpg){#fig-diana}
@@ -129,7 +129,7 @@ Como medida de la dispersión de una muestra, es útil considerar la varianza mu
 ::: {#def-varianzamuestral}
 Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, definimos la varianza muestral $S_n^2$ como
 $$ S_n^2 = \frac 1 {n - 1} \sum_{i = 1}^n \left(X_i - \bar{X}_n\right)^2.$$
-Es sencillo demostrar la fórmula alternativa para $\bar{S}_n^2$:
+Es sencillo demostrar la fórmula alternativa para $S_n^2$:
 $$S_n^2 = \frac n {n - 1} \left(\bar{X^2}_n - (\bar{X}_n)^2\right),$$ 
 donde $\overline{X^2}_n= \frac 1 n \sum_{1\leq i \leq n} X_i^2$ es la media de los cuadrados de los valores de la muestra. 
 :::
@@ -147,7 +147,7 @@ Ahora,
 $$\left(X_i -\mu_f - \frac 1 n\sum_{1\leq j\leq n}(X_j -\mu_f)\right)^2 = \left(\frac {n - 1} n (X_i - \mu_f) - \frac 1 n\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)\right)^2$$
 Al desarrollar este cuadrado nos encontramos con $(\frac {n - 1} n (X_i - \mu_f))^2 + \frac 1 n^2\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)^2$ y con productos de la forma $(\frac {n - 1} n (X_i - \mu_f)\frac 1 n(X_j -\mu_f))$, para $j\neq i$. Todos estos últimos productos tienen esperanza nula porque las variables $X_i$ y $X_j$ son independientes.  
 
-Deducimos que 
+Obtenemos en consecuencia que 
 \begin{align}
 \mathbb{E}[S_n^2] &=& \frac 1 {n - 1} \sum_{i = 1}^n \mathbb{E}\left[(\frac {n - 1} n (X_i - \mu_f))^2+ \frac 1 {n^2}\sum_{1\leq j\leq n, j\neq i}(X_j -\mu_f)^2\right]\\ 
  &=& \frac 1 {n - 1} n\left(\frac {(n -1)^2}{n^2}+ \frac {n - 1} {n^2}\right)\sigma_f^2\\ 
@@ -160,23 +160,92 @@ Deducimos de la @prp-espvar que el centro de los valores de la distribución de 
 ## Distribución de la media y de la varianza muestrales para una m.a.s de una distribución normal.
 
 
-En las secciones anteriores, hemos caracterizado la esperanza y la varianza de la distribución de los valores de la media muestral $\bar{X}_n$ así como la esperanza de la varianza muestral $S^2_n$. Es destacable el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución $f$ de $X$. ¿Podemos decir algo más sobre la distribución de estos estadísticos si asumimos un modelo concreto para $f$? En el caso en que hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ somos capaces de caracterizar con detalles la distribución muestral de $\bar{X}_n$ y de $S^2_n$$, e incluso obtener un resultado sobre su distribución conjunta. La siguiente proposición establecer resultados de gran importancia para la teoría de la inferencia.
+En las secciones anteriores, hemos caracterizado la esperanza y la varianza de la distribución de los valores de la media muestral $\bar{X}_n$ así como la esperanza de la varianza muestral $S^2_n$. Es destacable el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución $f$ de $X$. ¿Podemos decir algo más sobre la distribución de estos estadísticos si asumimos un modelo concreto para $f$? En el caso en que hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ somos capaces de caracterizar con detalles la distribución muestral de $\bar{X}_n$ y de $S^2_n$, e incluso obtener un resultado sobre su distribución conjunta. La siguiente proposición establece resultados de gran importancia para la teoría de la inferencia.
 
 ::: {#prp-distxbar}
 Consideramos una muestra aleatoria simple de una distribución normal $\mathcal{N}(\mu,\sigma^2)$, $\bar{X}_n$ es su media muestral y $S^2_n$ la varianza muestral, se cumple
+
 1. $\bar{X}_n$ y $S^2_n$ son dos v.a. independientes. 
 2. 
 $$\bar{X}_n\sim \mathcal{N}(\mu,\frac {\sigma^2} n),$$
 o, de manera equivalente,
-$$\frac{\bar{X}_n-\mu} {\sigma/\sqrt{n}} \sim \mathcal{N}(0,1).$$
-3. $(n - 1)S_n^2/sigma^2$ sigue una ji-cuadrado con $n - 1$ grados de libertad.
-:::
+$$\frac{\bar{X}_n-\mu} {\sigma/\sqrt{n}} \sim \mathcal{N}(0,1).$$ {#eq-xbarestandar}
+3. La variable $(n - 1)S_n^2/\sigma^2$ sigue una distribución ji-cuadrado con $n - 1$ grados de libertad, que denotamos por $(n - 1)S_n^2/ \sigma^2\sim \chi^2_{n-1}$
 
+:::
 ::: {.proof}
+Cualquier combinación de variables normales sigue una distribución normal, por lo que deducimos  que $\bar{X}_n$ tiene una distribución normal, con esperanza y varianza obtenidas en la @prp-espvar, lo que demuestra el punto 2. 
 
+Por otra parte, calculemos la covarianza de $\bar{X}_n$ con cualquier $X_i - \bar{X}_n$, para $i = 1,\ldots, n$:
+\begin{align*}
+\mathbb{E}[(X_i-\bar{X}_n)(\bar{X}_n - \mu)] &=& \mathbb{E}[(X_i-\mu + \mu - \bar{X}_n)(\bar{X}_n - \mu)]\\
+&=& \mathbb{E}[(X_i - \mu)(\bar{X}_n - \mu)] -\mathbb{E}[ (\bar{X}_n - \mu)^2]\\
+&=& \frac 1 n \sum_{j=1}^n\mathbb{E}[(X_i - \mu)(X_j - \mu)] - \sigma^2/n\\
+\end{align*}
+Al ser las variables $X_1, \ldots, X_n$ independientes,  $\mathbb{E}[(X_i - \mu)(X_j - \mu)] = 0$ excepto cuando $i=j$, en cuyo caso, es igual a la varianza de $X_i$, es decir $\sigma^2$. Concluimos que $cov(\bar{X}_n, X_i - \bar{X}_n) = 0$ para todo $i = 1, \ldots, n$. Puesto que todas estas variables son variables normales, deducimos que $\bar{X}_n$ es independiente de $X_i - \bar{X}_n$ para todo $i = 1, \ldots, n$ y, por lo tanto, independiente de cualquier función de $X_1 - \bar{X}_n, \ldots, X_n - \bar{X}_n$, en particular de $S_n^2$. Esto demuestra el punto 1.
+
+Para demostrar el punto 3., procederemos por inducción sobre $n$. Recordemos que el cuadrado de una variable normal estándar es una ji-cuadrado con 1 grado de libertad, y que la suma de $k$ variables ji-cuadrado independientes con $g_1, \ldots, g_k$ grados de libertad sigue una distribución ji-cuadrado con $g_1+\hdots+g_k$ grados de libertad.
+
+Consideremos $n = 2$. Tenemos que 
+$$S_2^2/\sigma^2 = \frac 1 {\sigma^2}\left((X_1 - \frac {X_1 + X_2} 2)^2 +(X_2 - \frac {X_1 + X_2} 2)^2 \right)= \frac 1 {2\sigma^2} (X_1 - X_2)^2.$$
+El término de la derecha es el cuadrado de una normal estándar, es decir una ji-cuadrado con 1 grado de libertad, lo que demuestra el caso $n=2$. 
+
+Supongamos ahora que el punto 3 es cierto para $n-1$, es decir asumimos que $(n-2)S_{n_1}/\sigma^2\sim \chi^2_{n-2}$. Vamos a usar el siguiente lema:
+
+::: {#lem-recursionSn}
+$$\mbox{For $n\geq 2$, }\quad (n - 1)S^2_n =(n - 2)S^2_{n-1}+\frac {n-1}{n} (X_n -\bar{X}_{n -1})^2.$$ {#eq-recursionSn} 
 :::
-Como ejemplo, consideremos un aparato de medición que  proporciona valores que se distribuyen según una Normal, con una media de 120 y una desviación típica de 12. Por la propiedad de la distribución Normal, el 95\% de los valores están entre $\mu-2\sigma$ y $\mu-2\sigma$, es decir entre 96 y 144. En cambio, si repito 9 veces la medición y proporciono la media de estas nueve mediciones, el 95\% de los valores que obtendría con este procedimiento se encontrarían entre  $\mu-2\sigma/\sqrt{n}$ y $\mu-2\sigma/\sqrt{n}$, es decir entre 112 y 128, lo que implica una precisión mucho mayor.
+
+Para establecer @eq-recursionSn, desarrollamos $S_n^2$:
+
+\begin{align*}
+(n - 1)S^2_n =\sum_{i =1}^n (X_i - \bar{X}_n)^2 &=& \sum_{i =1}^{n-1} (X_i - \bar{X}_n)^2 +(X_n - \bar{X}_n)^2\\
+&=& \sum_{i =1}^{n-1} (X_i - \bar{X}_{n-1}+ \bar{X}_{n-1}-\bar{X}_n)^2 +(X_n - \bar{X}_n)^2\\
+&=& \sum_{i =1}^{n-1} (X_i - \bar{X}_{n-1})^2+ (n- 1)(\bar{X}_{n-1}-\bar{X}_n)^2 +(X_n - \bar{X}_n)^2\\
+&=& (n - 2)S^2_{n-1}+ (n- 1)(\bar{X}_{n-1}-\bar{X}_n)^2 +(X_n - \bar{X}_n)^2\\
+&=& (n - 2)S^2_{n-1}+ (n- 1)(\frac{\bar{X}_{n-1}-X_n} n)^2 +(\frac {n-1} n (X_n - \bar{X}_{n-1}))^2\\
+&=& (n - 2)S^2_{n-1}+(\frac {n-1} n (X_n - \bar{X}_{n-1}))^2.\\
+\end{align*}
+
+Hemos usado $\sum_{i =1}^{n-1}(X_i -\bar{X}_{n-1})=0$ y $\bar{X}_n =\frac {(n-1) \bar{X}_{n - 1}} n + \frac {X_n} n$.
+
+Al ser $X_n$ y $\bar{X_{n-1}}$ variables normales independientes, deducimos que $(\frac {n-1} {\sigma n} (X_n - \bar{X}_{n-1}))$ es una normal estándar, por lo que su cuadrado es una ji-cuadrado con 1 grado de libertad. Es independiente de $\bar{X}_{n-1}$, por el punto 2, y por la hipótesis de inducción, $(n - 2)S^2_{n-1}/\sigma^2\sim \chi^2_{n-2}$. Por la propiedad de sumas de variables ji-cuadrado independientes, deducimos que $(n - 1)S_n^2/ \sigma^2\sim \chi^2_{n-1}$, lo que completa la demostración por inducción del punto 3.
+:::
 
 En una subsección posterior, veremos que este resultado es válido asíntoticamente (cuando $n$ tiende hacia $+\infty$), para una clase muy grande de distribuciones $f$ de $X$.
 
-## Varianza muestral
+## Distribuciones t de Student y F de Snedecor
+Las distribuciones y los resultados obtenidos en la @prp-espvarxbar son esenciales cuando nuestro modelo consiste en una distribucíon normal. El resultado @eq-xbarestandar en particular será la base para construir en temas posteriores una estimación de la media "poblacional" $\mu$ que incluya un margen de error. Sin embargo, esta fórmula comprende dos parámetros a priori desconocidos, $\mu$ y $\sigma$. Para centrarnos en $\mu$ es natural sustituir en ella $\sigma$ por el valor de la desviación típica de la muestra $S_n$. Es lo que hizo Gosset a principios del siglo XX, obteniendo la densidad resultante y publicando el resultado bajo el seudónimo de "Student".
+
+::: {#prp-tstud}
+Consideramos $(X_1,\ldots,X_n)$ una muestra aleatoria simple de una distribución $\mathcal{N}(\mu,\sigma^2)$, sea $\bar{X}$ la media muestral, la distribución de los valores de 
+$$T=\frac{\bar{X}-\mu}{S/\sqrt{n}}$$
+tiene por densidad
+
+$$ f_{t_{n -1}}(t)\propto \frac 1 {(1+t^2/(n-1))^{n/2}},\quad -\infty<t<\infty,$$ {#eq-densstud}
+donde el símbolo $\propto$ significa ``es proporcional a'', es decir que existe una constante $K$ tal que $f_{t_{n -1}}(t) = K \frac 1 {(1+t^2/(n-1))^{n/2}},\quad -\infty<t<\infty$. 
+
+
+La distribución que admite esta densidad se llama distribución t de Student con $n-1$ grados de libertad. Escribimos $T\sim t_{n-1}$.
+:::
+
+
+::: {.callout-important}
+## Distribución t de Student
+La distribución t de Student con $k$ grados de libertad está definido por su función de densidad:
+$$ f_{t_k}(t)\propto \frac 1 {(1+t^2/k)^{(k+1)/2}},\quad -\infty<t<\infty,$$
+Por las propiedades de una función de densidad se puede demostrar que la constante de proporcionalidad es
+$$K=\frac {\Gamma(\frac{k+1} 2)}{\Gamma(\frac k 2)}\frac 1 {\sqrt{k\pi}},$$
+donde $\Gamma$ denota la función Gamma[^1] 
+
+[^1]: La función Gamma  tiene la expresión siguiente: para cualquier real $\alpha>0$, $\Gamma(\alpha)=\int_{0}^\infty t^{\alpha-1}e^{-t}dt.$.
+
+:::
+
+::: {.proof}
+Vamos a demostrar que $T=\frac{\bar{X}-\mu}{S/\sqrt{n}}$ tiene por densidad la expresión dada en la @eq-densstud. Para ello, introducimos las dos variables $U = (\bar{X}_n - \mu)/\sqrt{\sigma/n}$ que sigue una distribución normal estándar y $V =  (n-1)S_n^2/\sigma^2$ que sigue una distribución ji-cuadrado con $n-1$ grados de libertad. Tenemos que $T = U/\sqrt{V/(n-1)}$. Como son independientes, la densidad conjunta de $U$ y $V$ es el producto de sus densidades:
+$$ f_{U, V}(u, v) = \frac 1 {(2\pi)^2} e^{-u^2/2}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} v^{(p/2) - 1} e^{- v/2}, \quad -\infty<u<\infty,\ 0<v<\infty.$$
+:::
+La distribución de $T$ depende por lo tanto del tamaño $n$ de la muestra, a través de los llamados ``grados de libertad''. Se puede demostrar que la densidad $F_{t_{k}}$ de la distribución t de Student con $k$ grados de libertad admite la siguiente expresión:
+
+La distribución t tiene colas más pesadas que la distribución Normal, lo que es intuitivamente natural puesto que, al obtenerse $T$ sustituyendo $\sigma$ por $S$, el denominador de $T$ presenta ahora también variabilidad. Esta variabilidad en el denominador resulta en que $T$ puede tomar con más probabilidad valores más extremos. Sin embargo, si los grados de libertad aumentan, la variabilidad de $S$ disminuye, y la distribución t de Student asociada se parece más a una Normal. 
