@@ -214,7 +214,7 @@ Al ser $X_n$ y $\bar{X_{n-1}}$ variables normales independientes, deducimos que 
 
 En una subsección posterior, veremos que este resultado es válido asíntoticamente (cuando $n$ tiende hacia $+\infty$), para una clase muy grande de distribuciones $f$ de $X$.
 
-## Distribuciones t de Student y F de Snedecor
+## Distribución t de Student
 Las distribuciones y los resultados obtenidos en la @prp-espvarxbar son esenciales cuando nuestro modelo consiste en una distribucíon normal. El resultado @eq-xbarestandar en particular será la base para construir en temas posteriores una estimación de la media "poblacional" $\mu$ que incluya un margen de error. Sin embargo, esta fórmula comprende dos parámetros a priori desconocidos, $\mu$ y $\sigma$. Para centrarnos en $\mu$ es natural sustituir en ella $\sigma$ por el valor de la desviación típica de la muestra $S_n$. Es lo que hizo Gosset a principios del siglo XX, obteniendo la densidad resultante y publicando el resultado bajo el seudónimo de "Student".
 
 ::: {#prp-tstud}
@@ -233,19 +233,51 @@ La distribución que admite esta densidad se llama distribución t de Student co
 ::: {.callout-important}
 ## Distribución t de Student
 La distribución t de Student con $k$ grados de libertad está definido por su función de densidad:
-$$ f_{t_k}(t)\propto \frac 1 {(1+t^2/k)^{(k+1)/2}},\quad -\infty<t<\infty,$$
-Por las propiedades de una función de densidad se puede demostrar que la constante de proporcionalidad es
-$$K=\frac {\Gamma(\frac{k+1} 2)}{\Gamma(\frac k 2)}\frac 1 {\sqrt{k\pi}},$$
-donde $\Gamma$ denota la función Gamma[^1] 
+$$ f_{t_k}(t)= \frac {\Gamma(\frac{k+1} 2)}{\Gamma(\frac k 2)}\frac 1 {\sqrt{k\pi}} \frac 1 {(1+t^2/k)^{(k+1)/2}},\quad -\infty<t<\infty,$$
+donde $\Gamma$ denota la función Gamma.[^1] 
 
-[^1]: La función Gamma  tiene la expresión siguiente: para cualquier real $\alpha>0$, $\Gamma(\alpha)=\int_{0}^\infty t^{\alpha-1}e^{-t}dt.$.
+[^1]: La función Gamma  tiene la expresión siguiente: para cualquier real $\alpha>0$, $\Gamma(\alpha)=\int_{0}^\infty t^{\alpha-1}e^{-t}dt.$
+    De hecho, tiene asociada una familia de distribuciones, las llamadas distribuciones Gamma.
+    Una distribución Gamma admite dos parámetros $\alpha>0$, y $\beta> 0$ y su densidad es 
+    $$ f_{\alpha, \beta}(x) = \frac 1 {\Gamma(\alpha)\beta^\alpha} x^{\alpha - 1} e^{-x/\beta}, \quad y>0$$ {#eq-gammadens}
 
 :::
 
 ::: {.proof}
-Vamos a demostrar que $T=\frac{\bar{X}-\mu}{S/\sqrt{n}}$ tiene por densidad la expresión dada en la @eq-densstud. Para ello, introducimos las dos variables $U = (\bar{X}_n - \mu)/\sqrt{\sigma/n}$ que sigue una distribución normal estándar y $V =  (n-1)S_n^2/\sigma^2$ que sigue una distribución ji-cuadrado con $n-1$ grados de libertad. Tenemos que $T = U/\sqrt{V/(n-1)}$. Como son independientes, la densidad conjunta de $U$ y $V$ es el producto de sus densidades:
-$$ f_{U, V}(u, v) = \frac 1 {(2\pi)^2} e^{-u^2/2}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} v^{(p/2) - 1} e^{- v/2}, \quad -\infty<u<\infty,\ 0<v<\infty.$$
-:::
-La distribución de $T$ depende por lo tanto del tamaño $n$ de la muestra, a través de los llamados ``grados de libertad''. Se puede demostrar que la densidad $F_{t_{k}}$ de la distribución t de Student con $k$ grados de libertad admite la siguiente expresión:
+Vamos a demostrar que $T=\frac{\bar{X}-\mu}{S/\sqrt{n}}$ tiene por densidad la expresión dada en la @eq-densstud. Para ello, introducimos las dos variables $Z = (\bar{X}_n - \mu)/\sqrt{\sigma/n}$ que sigue una distribución normal estándar y $Y =  (n-1)S_n^2/\sigma^2$ que sigue una distribución ji-cuadrado con $n-1$ grados de libertad. Tenemos que $T = Z/\sqrt{Y/(n-1)}$. Como son independientes, la densidad conjunta de $Z$ y $Y$ es el producto de sus densidades:
+$$ f_{Z, Y}(z, y) = \frac 1 {\sqrt{2\pi}} e^{-z^2/2}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} y^{(n - 1)/2 - 1} e^{- y/2}, \quad -\infty<z<\infty,\ 0<y<\infty.$$
+Sea $\Phi$ la aplicación que transforma $(Z, Y)$  en $(T, Y)$, $\Phi(z, y) = (z/\sqrt{y/(n - 1)}, y)$. Se trata de un difeormorphismo de $\mathbb{R} \times\mathbb{R}^+$ a  $\mathbb{R} \times\mathbb{R}^+$. Deducimos que la densidad conjunta de $(T, Y)$ es 
+$$f_{T, Y}(t, y) = f_{Z, Y}(\Phi^{-1}(t, y))\frac 1 {J\Phi(\Phi^{-1}(t, y))},$$
+donde $J\Phi$ es el determinante Jacobiano de $\Phi$. Tenemos que $J\Phi(z, y) = \frac 1 {\sqrt{y/(n -1)}}$, por lo que
+$$ f_{T, Y}(t, y) = \frac 1 {\sqrt{2\pi}} e^{-\frac {t^2 y}{2(n-1)}}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} y^{(n - 1)/2 - 1} e^{- y/2}\sqrt{y/(n-1)}, \quad -\infty<t<\infty,\ 0<y<\infty.$$
+Integramos respecto a $y$ para obtener la densidad marginal de $T$:
+$$ f_{T}(t) = \frac 1 {\sqrt{\pi(n-1)}} \frac 1 {\Gamma(\frac{n - 1} 2) 2^{n/2}}\int_0^{+\infty} y^{n/2 - 1} e^{- y/2(\frac {t^2} {n-1} + 1)}  dy.$$
+Reconocemos en el integrando una función proporcional a la densidad de una distribución Gamma de parámetros $\alpha = n/2$ y $\beta=2/(\frac {t^2} {n-1} + 1)$. Deducimos de la @eq-gammadens que la integral del término de la derecho es igual a $\Gamma(n/2)2^{n/2}/(\frac {t^2} {n-1} + 1)^{n/2}$.
 
-La distribución t tiene colas más pesadas que la distribución Normal, lo que es intuitivamente natural puesto que, al obtenerse $T$ sustituyendo $\sigma$ por $S$, el denominador de $T$ presenta ahora también variabilidad. Esta variabilidad en el denominador resulta en que $T$ puede tomar con más probabilidad valores más extremos. Sin embargo, si los grados de libertad aumentan, la variabilidad de $S$ disminuye, y la distribución t de Student asociada se parece más a una Normal. 
+En resumen, hemos obtenido que 
+$$f_{T}(t) = \frac 1 {\sqrt{\pi(n-1)}} \frac {\Gamma(n/2)} {\Gamma(\frac{n - 1} 2) }\frac 1 {(1+t^2/(n-1))^{n/2}}.$$
+:::
+La distribución de $T$ depende por lo tanto del tamaño $n$ de la muestra, a través de los llamados ``grados de libertad''.
+
+La distribución t tiene colas más pesadas que la distribución Normal, lo que es intuitivamente natural puesto que, al obtenerse $T$ sustituyendo $\sigma$ por $S$, el denominador de $T$ presenta ahora también variabilidad. Esta variabilidad en el denominador resulta en que $T$ puede tomar con más probabilidad valores más extremos. Sin embargo, si los grados de libertad aumentan, la variabilidad de $S$ disminuye, y la distribución t de Student asociada se parece más a una Normal. En la @fig-densidad-student, están representadas la densidad de la distribución t de Student para varios valores del paramétro de grados de libertad.
+
+![Densidad de la distribución t de Student para varios valores de los grados de libertad](figures/densidad_student.pdf){#fig-densidad-student}
+
+## Distribución F de Snedecor para el cociente de varianzas.
+Otra distribución muy importante en las aplicaciones está asociada al cociente de variables ji-cuadrado independientes y se utiliza por lo tanto para comparar varianzas muestrales correspondientes a variables diferentes o a grupos diferentes. Se llama la distribución $F$ de Snedecor y la introducimos en la siguiente definición.
+
+::: {#prp-F-Snedecor}
+Consideremos $U_1$ y $U_2$ dos variables independientes de distribución ji-cuadrado con $p_1$ y $p_2$ grados de libertad respectivamente. El cociente $F = \frac {U_1/p_1}{U_2/p_2}$ admite la densidad
+$$f_F(x) =  \frac {\Gamma(\frac {p_1 + p_2} 2)}{\Gamma(p_1)\Gamma(p_2)}(\frac{p_1}{p_2})^{p_1}\frac{x^{p_1/2-1}}{(1+ \frac {p_1}{p_2} x)^{\frac{p_1+p_2} 2}}.$${#eq-def-F}
+Esta distribución se llama F de Snedecor con $p_1$ y $p_2$ grados de libertad y se denota $F_{p_1, p_2}$.
+:::
+
+:::{.proof}
+Para obtener la densidad del cociente que nos interesa, procedemos como para la densidad t de Student. Escribimos la distribución conjunta de $U_1$ y $U_2$ como el producto de las distribuciones marginales, consideramos el difeomorfismo de $\mathbb{R}^+\times\mathbb{R}^+$ a $\mathbb{R}^+ \times\mathbb{R}^+$, $(F, U_2)=\Phi(U_1, U_2)  = (\frac {U_1/p_1}{U_2/p_2}, U_2)$. Su determinante Jacobiano es $p_2/(p_1 u_2)$. Deducimos la densidad conjunta de $F$ y $U_2$ que integramos respecto a $u_2$ para obtener la densidad marginal de $F$. Reconociendo que el integrando es proporcional a una densidad Gamma, obtenemos @eq-def-F. 
+:::
+
+
+
+Consideremos dos variables aleatorias normales $X$ e $Y$ con varianzas $\sigma_2^X$ y $\sigma_2^Y$, así como $X_1, \ldots, X_{n_1}$ y $Y_1, \ldots, Y_{n_2}$ dos muestras aleatorias simples de $X$ y $Y$ respectivamente. Por la @prp-F-Snedecor sabemos que
+$$\frac{(n_1-1)S_{n_1}^X/\sigma_X^2}{(n_2-1)S_{n_2}^Y/\sigma_Y^2}\sim F_{n_1-1, n_2-1}.$$
+
