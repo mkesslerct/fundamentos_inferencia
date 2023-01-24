@@ -1,0 +1,328 @@
+# Introducción a la teoría de la estimación
+
+## Introducción
+
+Consideramos una variable $X$ asociada a un experimento aleatorio y nos interesa obtener información sobre su distribución.
+
+::: {.callout-important appearance="minimal"}
+La *estimación* hace referencia al proceso de conseguir información sobre la distribución de $X$ a partir de los valores de una muestra. 
+:::
+
+Distinguimos dos situaciones:
+
+- Tenemos decidido qué modelo usar para la distribución de $X$, es decir que asumimos que pertenece a una familia de distribuciones que admiten una densidad o una función puntual de probabilidad de una determinada forma. Supondremos que esta familia es paramétrica: la distribución depende de un parámetro, posiblemente multidimensional,  que varía en un dominio de $\mathbb{R}^p, p\in \mathbb{N}$. En este caso, la estimación consiste en sacar información, basándonose en los valores de la muestra,  sobre los parámetros desconocidos de la distribución de $X$. Hablamos de **estimación paramétrica**.
+
+::: {.callout-note}
+## Estimación paramétrica: ejemplos 
+- Queremos realizar una medición con
+un aparato, la variable que nos interesa es $X$ "valor proporcionado por
+el aparato", pensamos que la distribución de los valores que puede tomar
+$X$ se puede aproximar por una distribución Normal. La familia parámetrica está formada por las distribuciones normales con parámetros $\mu$ y $\sigma^2$ que varían en $\mathbb{R}$ y $\mathbb{R}^+$ respectivamente.
+- Una población que presenta una proporción con una determinada característica. Consideraremos el experimento de extraer una persona al azar en la población, la variable asociada indica si la persona presenta la característica o no (con un 1 ó 0, respectivamente). Nuestro modelo asume que su distribución pertenece a la familia de distribuciones discretas de Bernoulli, que está parametrizada con un parámetro $p$ que varía en $[0, 1]$.
+:::
+
+- No podemos o no queremos limitar la familia de distribuciones consideradas para nuestro modelo a una familia paramétrica determinada. En este caso, buscaremos extraer información sobre la distribución en sí, aproximando por ejemplo su función de densidad o función de distribución acumulada. En este caso hablamos de **estimación no paramétrica**. 
+
+
+## Estimación paramétrica: estimación puntual
+
+### Definición
+
+Consideramos un experimento aleatorio, con una v.a $X$, y un modelo para
+la distribución de $X$. Este modelo incluye parámetros desconocidos.
+Disponemos de una muestra de la distribución de $X$.
+
+::: {#def-estimador-puntual}
+Cualquier estadístico (es decir, cualquier función de las observaciones
+de la muestra) diseñado para aproximar el valor de un parámetro $\theta$
+del modelo, se llama estimador puntual del parámetro $\theta$.
+:::
+
+En la tabla siguiente se presentan algunos parámetros usuales y los
+estimadores asociados:
+
+::: center
+  $\theta$                Estimador
+  ------------ --------------------------------
+  $\mu$           $\bar{X}$, media muestral
+  $\sigma^2$       $S^2$, varianza muestral
+  $p$           $\hat{p}$, proporción muestral
+:::
+
+Un aspecto fundamental de un estimador es que es una variable aleatoria:
+su valor concreto depende de la muestra escogida. Utilizaremos los
+resultados del tema anterior sobre distribuciones muestrales para
+deducir propiedades de las distribuciones de los estimadores más usados.
+
+### Métodos de construcción de estimadores
+
+Los estimadores mencionados en la sección anterior
+están basados en estadísticos naturales para los parámetros de interés:
+la media muestral para estimar la media, la proporción muestral para
+estimar la proporción, etc\... En modelos más sofisticados es útil
+disponer de métodos generales de construcción de estimadores razonables.
+
+#### Estimadores de momentos
+
+Es el método más antiguo de construcción de estimadores y se debe a Karl
+Pearson a principios del siglo XX.
+
+Consideremos una v.a. $X$ y un modelo para la distribución de sus
+valores, que consiste en la especificación de $x\mapsto f_X(x;\theta)$,
+siendo $f_X$ la función puntual de probabilidad, o la función de
+densidad según si $X$ es una variable discreta o continua.
+
+El parámetro $\theta$ es posiblemente multidimensional, llamamos $p$ su
+dimensión, es decir que $p$ es el número de parámetros desconocidos en
+el modelo. Para un entero $k$, consideramos el momento $\mu_k$ de orden
+$k$ de la distribución de $X$: $$\mu_k=\mathbb{E}[X^k].$$ Cabe destacar que la
+expresión de $\mu_k$ depende del parámetro $\theta$. Para enfatizar esta
+dependencia, escribiremos $\mu_k(\theta)$ para denotar el momento de
+orden $k$ del modelo descrito por $x\mapsto f_X(x;\theta)$. De manera
+paralela, definimos el momento *muestral* de orden $k$:
+$$m_k=\overline{X^k}=\frac {X_1^k+\ldots+X_n^k} n.$$ Para un parámetro
+de dimensión $p$, los estimadores de los momentos se obtienen igualando
+los $p$ primeros momentos del modelo para la distribución de $X$ con sus
+equivalentes muestrales: 
+
+\begin{align*}
+\mu_1(\theta)=\overline{X},\\
+\mu_2(\theta)=\overline{X^2},\\
+\vdots=\vdots,\\
+\mu_k(\theta)=\overline{X^k}.
+\end{align*}
+
+ Calculemos para ilustrar el método los estimadores de
+momentos en los modelos siguientes:
+
+-   $X\sim{\cal N}(\mu,\sigma^2).$, donde $\theta=(\mu,\sigma^2)$.
+    Necesitamos igualar los dos primeros momentos con sus equivalentes
+    muestrales. Los dos primeros momentos de la distribución
+    ${\cal N}(\mu,\sigma^2)$ son 
+
+\begin{align*}
+    \mu_1(\theta)=\mu\\
+\mu_2(\theta)=\mathbb{E}[X^2]=Var(X)+(\mathbb{E}[X])^2=\sigma^2+\mu^2.\\
+\end{align*}
+
+ Deducimos que los estimadores de los momentos son
+    solución del sistema: 
+
+\begin{align*}
+    \mu=\overline{X}\\
+    \sigma^2+\mu^2=\overline{X^2},\\
+\end{align*}
+
+ es decir
+    $$\hat{\mu}=\overline{X},\quad \hat{\sigma^2}=\overline{X^2}-(\overline{X})^2.$$
+
+-   Modelo de Bernoulli: $X\sim { Bernoulli}(p)$, donde desconocemos
+    $p$. Sólo necesitamos igualar el primer momento con su equivalente
+    muestral, obtenemos $$\hat{p}=\bar{X},$$ puesto que $X_1,\ldots,X_n$
+    sólo pueden tomar el valor 1 o el valor 0, su media es igual a la
+    proporción muestral de 1. El estimador de momentos de la proporción
+    $p$ en un modelo de Bernoulli es la proporción muestral.
+
+#### Método de máxima verosimilitud
+
+El método de máxima verosimilitud es sin dudas el método más utilizado
+de construcción de un estimador puntual.
+
+##### Verosimilitud
+
+Sea $X$ una v.a, con distribución especificada por
+$x\mapsto f_X(x;\theta)$, donde $\theta$ es el vector de parámetros, de
+dimensión $p$. Repetimos el experimento $n$ veces y consideramos la
+muestra aleatoria simple de la distribución de $X$: $(X_1,\ldots,X_n)$.
+La distribución de la v.a $n$-dimensional $(X_1,\ldots,X_n)$ está
+descrita a través de la relación
+$$f_{X_1,\ldots,X_n}(x_1,\ldots,x_n;\theta)=f_{X_1}(x_1,\theta)\ldots f_{X_n}(x_n,\theta),$$
+puesto que las v.a $X_1,\ldots,X_n$ son independientes. En esta última
+igualdad, $f$ representa o bien la función puntual de probabilidad o
+bien la función de densidad.
+
+::: {#def-verosimilitud}
+Sea $X$ una v.a, con distribución especificada por$(X_1,\ldots,X_n)$, 
+$x\mapsto f_X(x;\theta)$, donde $\theta$ es el vector de parámetros, de
+dimensión $p$. Consideramos una muestra aleatoria simple $(X_1,\ldots,X_n)$. 
+Para un valor concreto de $(X_1,\ldots,X_n)$, que denotamos por
+$(x_1,\ldots,x_n)$, consideramos la función de $\theta$:
+$$L_n:\left\{\begin{array}{l}
+\mathbb{R}^p\to \mathbb{R}\\
+\theta\mapsto L_n(\theta)=f_{X_1,\ldots,X_n}(x_1,\ldots,x_n;\theta).
+\end{array}\right.$$ La función $L_n$ asocia a cada valor de $\theta$ el
+valor de la densidad (o de la función puntual de probabilidad) de las
+observaciones $(X_1,\ldots,X_n)$ evaluada en $(x_1,\ldots,x_n)$, los
+valores concretos observados. Esta función $L_n$ se llama la función de verosimilitud.
+:::
+
+Como ejemplo, consideremos la tirada de una moneda y asociamos la v.a. $X$ que valga 1
+si sale cara y 0 si sale cruz. Utilizamos un modelo de Bernoulli de
+parámetro $p$ entre 0 y 1. Tiramos 10 veces la moneda y obtenemos la
+secuencia de valores siguiente: 0, 0, 1, 0, 1, 1, 1, 1, 1, 1. La
+verosimilitud asocia a cada valor posible de $p$, la cantidad
+$$\mathbb{P}(X_1=0;\ X_2=0;\ X_3=1;\ X_4=0;\ X_5=1;\ X_6=1;\ X_7=1;\ X_8=1;\ X_9=1;\ X_{10}=1).$$
+Deducimos que $L_n(p)=(1-p)(1-p)p(1-p)(1-p)^6=(1-p)^3\cdot p^7.$ Se
+representa la gráfica de la función $L_n(p)$ en la Figura
+@fig-verosimilitud 
+
+```{r}
+#| label: fig-verosimilitud
+#| fig-cap: Verosimilitud correspondiente al ejemplo de 10 tiradas de una moneda.
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+p <- seq(0, 1, by = 0.001)
+n <- 10
+n1 <- 7
+l <- (1 - p)^(n - n1) * p^n1
+plot(p, l, ylab = "Verosimilitud", type = "l")
+```
+
+La verosimilitud nos indica para qué valor de $p$, la probabilidad de
+haber observado la secuencia 0, 0, 1, 0, 1, 1, 1, 1, 1, 1 es la más
+alta.
+
+##### Estimador de máxima verosimilitud
+
+:::{#def-emv}
+Dados $(x_1,\ldots,x_n)$ los valores observados de una muestra,
+consideramos la verosimilitud $\theta\mapsto L_n(\theta)$.
+
+El estimador de máxima verosimilitud $\hat{\theta}$ de $\theta$ es
+cualquier valor de $\theta$ que maximiza $\theta\mapsto L_n(\theta)$,
+$$\hat{\theta}=\mathop{argmax}_{\theta} L_n(\theta).$$ La
+maximización se realiza sobre todos los valores admisibles para el
+parámetro $\theta$.
+:::
+
+###### Primer ejemplo: estimación de la proporción 
+Consideramos $X\sim{Bernoulli(p)}$. Observamos $x_1,\ldots,x_n$ una
+realización de la muestra aleatoria simple $(X_1,\ldots,X_n)$. Puesto
+que si $x=0,\ 1$, $f_X(x)=\mathbb{P}(X=x)=p^x\cdot(1-p)^{(1-x)}$, la
+verosimilitud es
+$$L_n(p)=p^{x_1}\cdot(1-p)^{(1-x_1)}\ldots p^{x_n}\cdot(1-p)^{(1-x_n)}=p^{\sum x_i}(1-p)^{n-\sum x_i}.$$
+Los candidatos a alcanzar el máximo se obtienen derivando la
+verosimilitud, o de manera equivalente y más sencilla, su logaritmo
+(llamado log-verosimilitud):
+$$\frac{d\log L_n}{dp}(p)=(n-\sum x_i)\left(-\frac 1 {1-p}\right)+\frac{\sum x_i} p =0.$$
+Despejamos $p$ y encontramos $\hat{p}=(\sum x_i)/n$. Comprobamos además
+que la derivada segunda de $L_n$ es negativa, lo que implica que
+$\hat{p}$ es efectivamente un máximo global. Deducimos que el estimador
+de máxima verosimilitud de $p$ es la proporción muestral.
+
+###### Segundo ejemplo: distribución normal.
+Consideramos $X\sim{\cal N}(\mu,\sigma^2)$. Observamos $x_1,\ldots,x_n$
+una realización de la muestra aleatoria simple $(X_1,\ldots,X_n)$. La
+verosimilitud se obtiene a partir de la expresión de la densidad de $X$:
+$$L_n(\mu,\sigma^2)=\prod_{i=1}^n \frac 1 {\sqrt{2\pi\sigma^2}} e^{-\frac {(x_i-\mu)^2}{2\sigma^2}}=\frac 1  {(2\pi\sigma^2)^{n/2}} e^{-\frac {\sum_{i=1}^n (x_i-\mu)^2}{2\sigma^2}}.$$
+La log-verosimilitud es
+$$\log L_n(\mu,\sigma^2)=-\frac n 2 \log(2\pi\sigma^2)-\frac {\sum_{i=1}^n (x_i-\mu)^2}{2\sigma^2}.$$
+Para encontrar el máximo, calculamos las derivadas parciales de
+$\log L_n$ respeto de $\mu$ y $\sigma^2$: 
+
+\begin{align}
+\frac{\partial}{\partial \mu}\log L_n(\theta)&=&\frac {\sum_{i=1}^n (x_i-\mu)^2}{\sigma^2}\\
+\frac{\partial}{\partial \sigma^2}\log L_n(\theta)&=&-\frac n 2 \frac 1 {\sigma^2} + \frac {\sum_{i=1}^n (x_i-\mu)^2}{2(\sigma^2)^2}.
+\end{align}
+
+ Resolvemos $\frac{\partial}{\partial \mu}L_n=0$ y
+$\frac{\partial}{\partial \sigma^2}L_n=0$, y encontramos que los dos
+candidatos a máximo son
+$$\hat{\mu}=\frac{\sum_{i=1}^n x_i} n,\quad \widehat{\sigma^2}=\frac{\sum_{i=1}^n (x_i-\hat{\mu})^2} n= \frac n {n-1} s^2.$$
+Para comprobar que son efectivamente máximos globales, podemos fijarnos
+en la expresión de la log-verosimilitud:
+$$\log L_n(\mu,\sigma^2)=-\frac n 2 \log(2\pi\sigma^2)-\frac {\sum_{i=1}^n (x_i-\mu)^2}{2\sigma^2}.$$
+Sea cual sea el valor de $\sigma^2$, la función
+$\mu\mapsto \log L_n(\mu,\sigma^2)$ alcanza su máximo cuando
+$\sum_{i=1}^n(x_i-\mu)$ es mínimo, es decir cuando
+$\mu=(\sum_{i=1}^n x_i)/n$. El máximo de
+$(\mu,\sigma^2)\mapsto \log L_n(\mu,\sigma^2)$ corresponderá por lo
+tanto al máximo de la función
+$\sigma^2\mapsto \log L_n(\hat{\mu},\sigma^2)$. Es fácil comprobar que
+$\sigma^2\mapsto \log L_n(\hat{\mu},\sigma^2)$ alcanza su máximo en
+$\widehat{\sigma^2}=\frac{\sum_{i=1}^n (x_i-\hat{\mu})^2} n= \frac n {n-1} s^2$.
+
+Los estimadores de máxima verosimilitud de $\mu$ y $\sigma^2$ son por lo
+tanto la media muestral y la llamada varianza muestral sesgada
+$\widehat{\sigma^2}=\frac{\sum_{i=1}^n (x_i-\hat{\mu})^2} n= \frac n {n-1} s^2.$
+
+:::{.callout-warning}
+## El estimador de máxima verosimilitud de la varianza para una m.a.s normal es sesgado.
+Se estableció en la @prp-espvar de la @sec-varmuestral, que la esperanza de la varianza muestral $s^2$ coincide con
+la varianza poblacional, por lo tanto
+$\mathbb{E}[\widehat{\sigma^2}]=\frac {n-1} n \sigma^2.$ Es un ejemplo en él que
+el método de máxima verosimilitud proporciona un estimador cuya esperanza no coincide con el parámetro que se busca estimar. Se dice en este caso, tal como lo veremos más adelante, que el estimador es sesgado.
+:::
+
+### Métodos para evaluar un estimador.
+
+Un estimador es una variable aleatoria y el valor que toma depende de la muestra concreta que se extraiga. Disponer de conocimiento sobre la distribución del estimador, que corresponde a su *distribución en el muestreo*, es valioso, porque permite manejar el riesgo y el error que podemos cometer al aproximar un parámetro de interés por el valor del estimador asociado.
+
+#### Error cuadrático medio.
+Una primera medida para evaluar un estimador se obtiene al calcular su variabilidad en el muestreo. Es deseable que esta variabilidad sea pequeña para que el valor que se obtenga no varíe demasiado según la muestra concreta extraida. Para ello, se introduce el error cuadrático medio, *Mean Squared Error*, que mide la esperanza de la distancia al cuadrado entre el estimador y el parámetro que pretende aproximar:
+
+:::{#def-mse}
+El error cuadrático medio del estimador $\hat{\theta}$ es la función de $\theta$ definida por
+    $$\theta\mapsto\mathbb{E}_\theta[(\hat{\theta} - \theta)^2], $${#eq-mse}
+donde $\mathbb{E}_\theta$ hace referencia a la esperanza calculada asumiendo el valor concreto $\theta$ del parámetro en el modelo escogido para la variable $X$. 
+:::
+
+:::{#exm-mse}
+Consideremos una m.a.s de una variable $X\sim \mathcal{N}(\mu,\sigma^2)$. El error cuadrático medio asociado a  $\bar{X}_n$, el estimador de máxima verosimilitud para $\mu$ es
+    $$\mu\mapsto\mathbb{E}_{(\mu,\sigma^2)}[(\bar{X}_n - \mu)^2]=\frac {\sigma^2} n, $$
+por los resultados de la @prp-espvarxbar. 
+Deducimos que el error cuadrático asociado a $\bar{X}_n$ no depende de $\mu$ sino solamente de $\sigma$. Si la variabilidad de $X$ es alta, es más difícil estimar $\mu$ y el error cuadrático medio del estimador de máxima verosimilitud para $\mu$ es mayor. Esa es una característica general de cualquier proceso de estimación: si la variabilidad presente en los datos es grande, peor será nuestra capacidad de extraer información de la muestra.
+:::
+
+:::{.callout-tip}
+## Sesgo y varianza. 
+El error cuadrático medio en la @eq-mse se puede descomponer introduciendo la esperanza de $\hat{\theta}$:
+
+\begin{align*}
+\mathbb{E}_\theta[(\hat{\theta} - \theta)^2]=\mathbb{E}_\theta[(\hat{\theta} - \mathbb{E}_\theta[\hat{\theta}] + \mathbb{E}_\theta[\hat{\theta}]-\theta)^2]\\
+ =\mathbb{E}_\theta[(\hat{\theta} - \mathbb{E}_\theta[\hat{\theta}])^2 +2(\mathbb{E}_\theta[\hat{\theta}]-\theta)\mathbb{E}_\theta[\hat{\theta} - \mathbb{E}_\theta[\hat{\theta}]] + (\mathbb{E}_\theta[\hat{\theta}]-\theta)^2\\ 
+ =\mathbb{E}_\theta[(\hat{\theta} - \mathbb{E}_\theta[\hat{\theta}])^2 + (\mathbb{E}_\theta[\hat{\theta}]-\theta)^2\\ 
+\end{align*}
+El término $\mathbb{E}_\theta[(\hat{\theta} - \mathbb{E}_\theta[\hat{\theta}])^2$ es la varianza del estimador $\hat{\theta}$ mientras que el término $\mathbb{E}_\theta[\hat{\theta}]-\theta$ mide la diferencia entre el centro de los valores que toma la distribución de $\hat{\theta}$ y el valor poblacional de $\theta$, esta diferencia se llama el sesgo del estimador. 
+:::
+
+
+Una  propiedad deseable para un estimador es que el centro de la
+distribución de los valores que puede tomar coincida con el valor del
+parámetro que queremos aproximar, es decir que el sesgo sea nulo.   Si éste es el caso, decimos que el
+estimador es insesgado. 
+
+:::{.callout-tip}
+## Comprobemos si los estimadores más usados son insesgados:
+
+-   Por la @prp-espvarxbar y @prp-espvar, deducimos que, sea cual
+    sea la distribución de $X$, $\bar{X}$ y $s_n^2$ son estimadores insesgados de $\mu$ y $\sigma^2$. También podemos formularlo como $(\bar{X}, s_n^2)$ es un estimador insesgado de $(\mu, \sigma^2)$.
+
+
+-   Proporción muestral $\hat{p}$: si repetimos la extracción con reemplazo en una población con proporción $p$ con una determinada característica, tenemos que $\hat{p} = N/ n$ donde $N$ es el número de
+    elementos en la muestra con la característica de interés, y 
+    $N\sim\mathcal{B}(n,p)$. Deducimos que
+    $$\mathbb{E}[\hat{p}]=\frac {\mathbb{E}[N]}{n}= \frac {np}n=p.$$ En este caso
+    también, la proporción muestral resulta ser un estimador insesgado
+    de la proporción.
+:::
+
+
+:::{.callout-note appearance="minimal"}
+A la hora de evaluar un estimador, si bien es deseable que el sesgo sea nulo, su varianza es un elemento que debemos tener en cuenta también, puesto que el error cuadrático media es la suma de la varianza y del cuadrado del sesgo. Pueden darse situaciones donde un estimador sesgado tenga menor error cuadrático medio que otro insesgado por presentar una menor varianza. Hablamos de "equilibrio entre sesgo y varianza".
+:::
+
+#### Estimador consistente
+
+Si un estimador es insesgado, nos interesa que la dispersión de los
+valores que puede tomar sea la más pequeña posible, para que la
+precisión de la estimación sea la mayor posible. Por consiguiente, una
+buena propiedad adicional de un estimador insesgado es que su varianza
+tienda a cero si el número de observaciones $n$ crece hacia infinito. En
+este caso, se dice que el estimador es consistente.
+
+De la misma manera que en el apartado anterior, podemos deducir, puesto que
+$$var(\bar{X}_n)=\frac {\sigma^2} n, \quad var(\hat{p})=var(\frac N n)= \frac 1 {n^2} var(N)=\frac{p(1-p)} n,$$
+tanto $\bar{X}_n$ como $\hat{p}$ son estimadores consistentes.
+

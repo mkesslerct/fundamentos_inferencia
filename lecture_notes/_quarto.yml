@@ -4,22 +4,33 @@ project:
 
 lang: es
 
+code-fold: true
+number-depth: 3
+
 book:
   title: "Fundamentos de inferencia"
-  author: "Mathieu Kessler"
-  date: "12/23/2022"
+  author: "Félix Belzunce & Mathieu Kessler"
+  search: true
+  repo-url: https://github.com/mkesslerct/fundamentos_inferencia
+  repo-actions: [edit]
+  downloads: [pdf, epub]
   chapters:
     - index.qmd
     - 01-distribucion_en_el_muestreo.qmd
+    - 02-estimacion.qmd
+    - 03-intervalos.qmd
     - references.qmd
 
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme: 
+      light: flatly
+      dark: darkly
   pdf:
     documentclass: scrreprt
+    echo: false
 
 
 

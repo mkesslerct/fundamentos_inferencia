@@ -1,0 +1,347 @@
+# Estimación por intervalos
+
+No queremos limitarnos a dar un valor para aproximar un parámetro sino
+proporcionar también una medida del error que pensamos cometer. Para
+ello, calcularemos un intervalo en él que pensamos que se encuentra el
+parámetro.
+
+## Idea básica
+
+Supongamos que queremos estimar la media $\mu$ de una v.a. $X$ cuya
+distribución es Normal con una desviación típica igual a 2 unidades, es
+decir $X\sim \mathcal{N}(\mu,4)$. Para ello, extraigo una muestra de
+tamaño 4, y estimo $\mu$ por el valor de $\bar{X}$. Por la @prp-distxbar en la sección  @sec-xbarnormal, sabemos que la distribución de $\bar{X}$ es
+$\mathcal{N}(\mu,\sigma^2/n)$ es decir $\mathcal{N}(\mu,1)$. Por la
+propiedad de la distribución Normal, deducimos que el 95% de las muestras
+proporcionan un valor de $\bar{X}$ que se encuentra a menos de 2
+unidades de la media $\mu$.
+
+Invertamos ahora la situación: sé donde está $\bar{X}$, ¿donde está
+$\mu$? Por la misma regla, se encuentra, para el 95% de las muestras, a
+menos de 2 unidades de $\bar{X}$, es decir que $\mu$ se encuentra en el
+intervalo $[\bar{X}-2,\bar{X}+2]$. Dicho de otra manera, para el 95% de
+las muestras, el intervalo aleatorio $[\bar{X}-2,\bar{X}+2]$ captura el
+valor del parámetro $\mu$.
+
+## Intervalo de confianza para la media $\mu$ de una distribución Normal con varianza conocida
+
+### Construcción
+
+Consideramos la variable $X\sim\mathcal{N}(\mu,\sigma^2)$. Suponemos que
+conocemos el valor de $\sigma^2$. La construcción del intervalo de
+confianza para la media $\mu$ se realiza siguiendo los siguientes pasos.
+
+-   Nos fijamos el llamado "nivel de riesgo", $\alpha$ un número entre 0
+    y 1. La cantidad $1-\alpha$ expresada en porcentaje se llama **nivel
+    de confianza**.\
+    Los valores más utilizados de $\alpha$ son $0.1$, $0.05$, y $0.01$,
+    lo que corresponde con niveles de confianza del $90\%$ ,$95\%$ y
+    $99\%$ respectivamente.
+
+-   Escogemos el estadístico $\bar{X}$ para estimar $\mu$. Su
+    distribución en su forma tipificada es
+    $$\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1).$$ Para
+    $0\leq u\leq 1$, utilizamos la notación $z_u$ para denotar el
+    cuantil $u$ de la distribución Normal estándar, es decir el valor
+    que cumple $\mathbb{P}(Z\leq z_u)=u$, o dicho de otra manera, el valor que
+    deja a su izquierda un área igual a $u$ debajo de la curva de la
+    densidad Normal estándar. En particular usaremos de manera repetida
+    los cuantiles siguientes: $z_{0.95}$, $z_{0.975}$ y $z_{0.995}$.
+    Para conocer sus valores, podemos buscar en la tabla de la Normal
+    estándar, los valores $0.95$, $0.975$ y $0.995$ en la columna de las
+    probabilidades $\phi(t)$ y apuntar los valores correspondientes de
+    $t$. Encontramos $z_{0.95}=1.64$, $z_{0.975}=1.96$ y
+    $z_{0.995}=2.56$.
+
+-   Dibujo en la densidad del estadístico
+    $\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}$, una región central que
+    represente el $100(1-\alpha)\%$ del área total, tal como viene
+    ilustrado en la figura siguiente
+
+    ```{r}
+    #| label: fig-densidad-estadistico-Z
+    #| fig-cap: Región central con un área $\alpha$ en la densidad de una Normal estándar. 
+    #| warning: false
+    #| fig-width: 10
+    #| fig-height: 7
+
+    library(dplyr)
+    alpha <- 0.05
+    x <- seq(-5, 5, by = 0.01)
+    phi <- dnorm(x)
+    cent <- between(x, qnorm(alpha/2), qnorm(1 - alpha/2))  
+    xzalf <- x[cent]
+    phizalf <- phi[cent]
+    vertices.x <- c(xzalf[1], xzalf, xzalf[length(xzalf)])
+    vertices.y <- c(0, phizalf, 0)
+    plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
+    polygon(vertices.x, vertices.y, density=10)
+    axis(
+        1,
+        pos=0,
+        labels=c(
+            "",
+            expression(-z[{1-alpha/2}]),
+            "",
+            expression(z[{1-alpha/2}]),
+            ""
+        ),
+        at=c(-5, qnorm(alpha/2), 0, qnorm(1-alpha/2), 5)
+    )
+    ```
+
+
+-   Deducimos
+    $$\mathbb{P}(-z_{1-\alpha/2}\leq \frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\leq z_{1-\alpha/2})=1-\alpha.$$
+    Despejamos $\mu$ en las desigualdades 
+
+\begin{align}
+    \mathbb{P}(-z_{1-\alpha/2}{\sigma/\sqrt{n}}\leq  {\bar{X}-\mu} \leq z_{1-\alpha/2}{\sigma/\sqrt{n}})&=&1-\alpha\\
+    \Leftrightarrow \mathbb{P}(-\bar{X}-z_{1-\alpha/2}{\sigma/\sqrt{n}}\leq -\mu \leq -\bar{X}+ z_{1-\alpha/2}{\sigma/\sqrt{n}})&=&1-\alpha\\
+    \Leftrightarrow \mathbb{P}(\bar{X}+z_{1-\alpha/2}{\sigma/\sqrt{n}}\geq \mu \geq \bar{X}- z_{1-\alpha/2}{\sigma/\sqrt{n}})&=&1-\alpha\\
+    \Leftrightarrow \mathbb{P}(\bar{X}-z_{1-\alpha/2}{\sigma/\sqrt{n}}\leq \mu \leq \bar{X}+ z_{1-\alpha/2}{\sigma/\sqrt{n}})&=&1-\alpha
+\end{align}
+
+-   El intervalo de confianza al $100(1-\alpha)\%$ para $\mu$ es
+    $$\mu \in [\bar{X}-z_{1-\alpha/2}{\sigma/\sqrt{n}}; \bar{X}+ z_{1-\alpha/2}\sigma/\sqrt{n}].$$
+    Se escribe también de otra manera equivalente:
+    $$\mu = \bar{X}\pm z_{1-\alpha/2}{\sigma/\sqrt{n}},$$ el término
+    $z_{1-\alpha/2}{\sigma/\sqrt{n}}$ se llama término de error.
+
+#### Interpretación
+
+El intervalo
+$[\bar{X}-z_{1-\alpha/2}{\sigma/\sqrt{n}}; \bar{X}+ z_{1-\alpha/2}\sigma/\sqrt{n}]$
+es un intervalo aleatorio, puesto que sus extremos dependen de la
+muestra escogida. Por su construcción, sabemos que este intervalo
+aleatorio tiene una probabilidad de $100(1-\alpha)\%$ de capturar el
+valor de $\mu$. Es decir que, al extraer una muestra, tengo una
+probabilidad igual a $1-\alpha$ de que el intervalo que calcularé
+efectivamente capture el valor $\mu$ que busco. También tengo una
+probabilidad $\alpha$ de que, al afirmar que $\mu$ se encuentra en
+$[\bar{X}-z_{1-\alpha/2}{\sigma/\sqrt{n}}; \bar{X}+ z_{1-\alpha/2}\sigma/\sqrt{n}]$,
+me equivoque. Sin embargo, esta probabilidad $\alpha$, el riesgo de
+equivocarme, se fija en general bastante pequeño, por ejemplo
+$\alpha=0.05$.
+
+Para ilustrar esta interpretación, he simulado 20 veces el proceso de
+extraer una muestra de tamaño 4 de una distribución
+$X\sim \mathcal{N}(\mu_X,1)$. He representado en la Figura
+@fig-ics en el eje Ox
+el número de la muestra y en el eje Oy el intervalo de confianza
+asociado. Además una línea horizontal representa el valor de $\mu$ que
+se pretende estimar, en este caso $\mu=2$. La gran mayoría de los
+intervalos capturan el valor correcto de $\mu$, pero hay un intervalo,
+el correspondiente a la muestra número 13 que no lo hace: este intervalo
+es erróneo, y esta muestra forma parte del 5% de las muestras "malas",
+es decir las que proporcionan intervalos equivocados.
+
+![Los intervalos de confianza al 95% correspondientes a 20 muestras de
+tamaño 4. La media que se busca estimar es $\mu=2$.](figures/ics.png){#fig-ics
+width="8cm"}
+
+#### Ejemplo
+
+Supongamos que queremos estimar la longitud media de un artículo
+producido por una máquina. Por experiencia, sabemos que es razonable
+modelizar la distribución de los valores de la longitud de los artículos
+producidos por una distribución Normal con media $\mu$ y desviación
+típica igual a 0.05. Para estimar $\mu$ extraemos una muestra de 5
+artículos y construimos un intervalo de confianza al 90%. Supongamos que
+los datos que se obtienen son los siguientes:
+
+::: center
+20.1, 20.05, 20.01, 19.95, 19.99.
+:::
+
+El intervalo de confianza es
+$\mu \in [\bar{X}-z_{1-\alpha/2}\sigma/\sqrt{n}, \bar{X}+z_{1-\alpha/2}\sigma/\sqrt{n}]$.
+Necesitamos $\bar{X}$, es fácil comprobar que $\bar{X}=20.02$, por otra
+parte, al haber escogido 90% de confianza, fijamos $\alpha=0.1$.
+Deducimos de la tabla Normal que $z_{1-\alpha/2}=z_{0.95}=1.64$.
+Concluimos que el intervalo buscado será
+$$[20.02-1.64\frac {0.05} {\sqrt{5}},20.02+1.64\frac {0.05} {\sqrt{5}}],$$
+es decir $\mu\in [19.98,20.06]$, o de forma equivalente
+$\mu=20.02\pm 0.04$.
+
+### Comentarios importantes
+
+a\)
+
+:   La construcción del intervalo de confianza está basada en la
+    hipótesis de que la distribución de la v.a. $X$ es Normal, puesto
+    que utilizamos
+    $$\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1).$$ Si
+    la distribución de $X$ no es Normal, el intervalo no es válido, es
+    decir que no podemos garantizar que la confianza especificada sea
+    cierta. Sin embargo, en el caso en que la muestra es grande, podemos
+    recurrir al Teorema Central del Límite, ver
+    [\[tcl\]](#tcl){reference-type="ref" reference="tcl"}, y sabemos que
+    $$\mbox{aproximadamente, }\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1),$$
+    lo que posibilita que los intervalos sean aproximadamente válidos:
+    la confianza especificada no será exacta pero casi\...
+
+    ¿A partir de cuantas observaciones consideramos una muestra como
+    grande? No hay respuesta universal, depende mucho de lo alejado que
+    está la distribución de $X$ de una distribución Normal. En general,
+    se suele considerar en práctica que $n\geq 30$ es suficiente para
+    que los intervalos construidos sean aproximadamente válidos.
+
+b\)
+
+:   Factores que afectan a la precisión de la estimación.\
+    Recordar que en la estimación por un intervalo, el margen de error
+    es $\pm z_{1.\alpha/2}\sigma/\sqrt{n}$. Deducimos en particular que
+
+    -   cuanto mayor sea $n$, más precisa será la estimación, es decir
+        que más pequeño será el intervalo de confianza.
+
+    -   cuanto menor sea $\sigma$, mayor precisión en la estimación.
+
+    -   cuanto mayor sea la confianza, peor será la precisión de la
+        estimación: si queremos garantizar con gran confianza que el
+        intervalo proporcionado captura $\mu$, no hay más remedio que
+        proporcionar un intervalo grande\...
+
+c\)
+
+:   La hipótesis de que $\sigma$ es conocida no es realista: en general
+    también hay que estimarla a partir de la muestra. La distribución
+    del estadístico que resulta de sustituir $\sigma$ por $S$, la
+    desviación típica muestral, $\frac {\bar{X}-\mu} {S/\sqrt{n}}$ es
+    una t de Student con $n-1$ grados de libertad. Podemos repetir los
+    pasos de construcción del intervalo de confianza para $\mu$
+    basándonos en el estadístico $\frac {\bar{X}-\mu} {S/\sqrt{n}}$:
+
+    -   Nos fijamos el "nivel de riesgo", $\alpha$.\
+
+    -   Escogemos el estadístico
+        $$T=\frac{\bar{X}-\mu}{S/\sqrt{n}}\sim t_{n-1}$$
+
+    -   Dibujo en la densidad del estadístico $T$ una región central que
+        represente el $100(1-\alpha)\%$ del área total, tal como viene
+        ilustrado en la figura siguiente
+
+```{r}
+    #| label: fig-densidad-estadistico-T
+    #| fig-cap: Región central con un área $\alpha$ en la densidad de una t de Student. 
+    #| warning: false
+    #| fig-width: 10
+    #| fig-height: 7
+    library(dplyr)
+    alpha <- 0.05
+    x <- seq(-5, 5, by = 0.01)
+    phi <- dt(x, df = 10)
+    cent <- between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10))  
+    xtalf <- x[cent]
+    phitalf <- phi[cent]
+    vertices.x <- c(xtalf[1], xtalf, xtalf[length(xtalf)])
+    vertices.y <- c(0, phitalf, 0)
+    plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
+    polygon(vertices.x, vertices.y, density=10)
+    axis(
+        1,
+        pos=0,
+        labels=c(
+            "",
+            expression(-t[{n-1}*symbol("\054")*{1-alpha/2}]),
+            "",
+            expression(t[{n-1}*symbol("\054")*{1-alpha/2}]),
+            ""
+        ),
+        at=c(-5, qt(alpha/2, 10), 0, qt(1-alpha/2, 10), 5)
+   )
+```
+
+
+    -   Deducimos
+        $$\mathbb{P}(-t_{n-1,1-\alpha/2}\leq \frac {\bar{X}-\mu} {S/\sqrt{n}}\leq t_{n-1,1-\alpha/2})=1-\alpha,$$
+        donde hemos utilizado la notación $t_{n-1,1-\alpha/2}$ para
+        denotar el cuantil $1-\alpha/2$ de la distribución $t_{n-1}$, es
+        decir el punto que deja un área igual a $1-\alpha/2$ a su
+        izquierda. Los valores de los cuantiles más usados de la
+        distribución t están recogidos en una tabla en el apéndice de
+        este capítulo.
+
+        Despejamos $\mu$ en las desigualdades y obtenemos
+        $$\mathbb{P}(\bar{X}-t_{n-1,1-\alpha/2}{S/\sqrt{n}}\leq \mu \leq \bar{X}+ t_{n-1,1-\alpha/2}{S/\sqrt{n}})=1-\alpha.$$
+
+    -   El intervalo de confianza al $100(1-\alpha)\%$ para $\mu$ es
+        $$\mu \in [\bar{X}-t_{n-1,1-\alpha/2}{S/\sqrt{n}}; \bar{X}+ t_{n-1,1-\alpha/2}S/\sqrt{n}].$$
+        Se escribe también
+        $$\mu = \bar{X}\pm t_{n-1,1-\alpha/2}{S/\sqrt{n}},$$ el término
+        $t_{n-1,1-\alpha/2}{S/\sqrt{n}}$ es el término de error.
+
+### Determinación del tamaño muestral
+
+#### Planteamiento
+
+Si estoy en condiciones de diseñar el experimento que quiero realizar
+para estimar la media $\mu$, puedo intentar decidir del número de
+observaciones en la muestra que serán necesarias para garantizar, con
+una confianza dada, que el margen de error sea menor que una cantidad
+prefijada. Es decir, que me fijo una cantidad $max$, y me pregunto cuál
+deberá de ser el valor de $n$ para que
+$$z_{1-\alpha/2}\frac \sigma{\sqrt{n}}\leq max.$$ Es fácil obtener $n$
+despejándolo de la desigualdad.
+
+#### Ejemplo
+
+La medición de la conductividad de un material sigue una distribución
+que modelizamos por una Normal con desviación típica $\sigma=0.5$.
+Quiero construir un intervalo de confianza al 95% para el valor promedio
+proporcionado de la conductividad pero quiero que el error cometido sea
+menor de 0.3. ¿cuántas veces deberé repetir la medición?
+
+Busco $n$ tal que $z_{1-\alpha/2}\sigma/\sqrt{n}\leq 0.3,$ sabiendo que
+$\sigma=0.5$, y $\alpha=0.05$. Obtengo
+$$1.96\frac {0.5} {\sqrt{n}}\leq 0.3,$$ es decir
+que$$n\geq \left(\frac {1.96\cdot 0.5}{0.3}\right)^2\simeq 10.67.$$
+Habrá por lo tanto que realizar 11 mediciones.
+
+## Cuantiles de la distribución $t$ de Student {#cuantiles-de-la-distribución-t-de-student .unnumbered}
+
+Valores de los cuantiles de la distribución $t$ de Student con $k$
+grados de libertad: para un $0\leq p\leq 1$, el valor $t_{k,p}$
+satisface $\mathbb{P}(t\leq t_{k,p})=p$.
+
+::: center
+  ------- --------------- -------------- --------------- -------------- -------------- -------------- -------------- -------------- -------------- --
+    $k$    $t_{k,0.995}$   $t_{k,0.99}$   $t_{k,0.975}$   $t_{k,0.95}$   $t_{k,0.90}$   $t_{k,0.80}$   $t_{k,0.70}$   $t_{k,0.60}$   $t_{k,0.50}$  
+
+     1        63,657          31,821         12,706          6,314          3,078          1,376          0,727          0,325          0,158      
+     2         9,925          6,965           4,303           2,92          1,886          1,061          0,617          0,289          0,142      
+     3         5,841          4,541           3,182          2,353          1,638          0,978          0,584          0,277          0,137      
+     4         4,604          3,747           2,776          2,132          1,533          0,941          0,569          0,271          0,134      
+     5         4,032          3,365           2,571          2,015          1,476           0,92          0,559          0,267          0,132      
+     6         3,707          3,143           2,447          1,943           1,44          0,906          0,553          0,265          0,131      
+     7         3,499          2,998           2,365          1,895          1,415          0,896          0,549          0,263           0,13      
+     8         3,355          2,896           2,306           1,86          1,397          0,889          0,546          0,262           0,13      
+     9         3,25           2,821           2,262          1,833          1,383          0,883          0,543          0,261          0,129      
+    10         3,169          2,764           2,228          1,812          1,372          0,879          0,542           0,26          0,129      
+    11         3,106          2,718           2,201          1,796          1,363          0,876           0,54           0,26          0,129      
+    12         3,055          2,681           2,179          1,782          1,356          0,873          0,539          0,259          0,128      
+    13         3,012           2,65           2,16           1,771           1,35           0,87          0,538          0,259          0,128      
+    14         2,977          2,624           2,145          1,761          1,345          0,868          0,537          0,258          0,128      
+    15         2,947          2,602           2,131          1,753          1,341          0,866          0,536          0,258          0,128      
+    16         2,921          2,583           2,12           1,746          1,337          0,865          0,535          0,258          0,128      
+    17         2,898          2,567           2,11            1,74          1,333          0,863          0,534          0,257          0,128      
+    18         2,878          2,552           2,101          1,734           1,33          0,862          0,534          0,257          0,127      
+    19         2,861          2,539           2,093          1,729          1,328          0,861          0,533          0,257          0,127      
+    20         2,845          2,528           2,086          1,725          1,325           0,86          0,533          0,257          0,127      
+    21         2,831          2,518           2,08           1,721          1,323          0,859          0,532          0,257          0,127      
+    22         2,819          2,508           2,074          1,717          1,321          0,858          0,532          0,256          0,127      
+    23         2,807           2,5            2,069          1,714          1,319          0,858          0,532          0,256          0,127      
+    24         2,797          2,492           2,064          1,711          1,318          0,857          0,531          0,256          0,127      
+    25         2,787          2,485           2,06           1,708          1,316          0,856          0,531          0,256          0,127      
+    26         2,779          2,479           2,056          1,706          1,315          0,856          0,531          0,256          0,127      
+    27         2,771          2,473           2,052          1,703          1,314          0,855          0,531          0,256          0,127      
+    28         2,763          2,467           2,048          1,701          1,313          0,855           0,53          0,256          0,127      
+    29         2,756          2,462           2,045          1,699          1,311          0,854           0,53          0,256          0,127      
+    30         2,75           2,457           2,042          1,697           1,31          0,854           0,53          0,256          0,127      
+    40         2,704          2,423           2,021          1,684          1,303          0,851          0,529          0,255          0,126      
+    60         2,66            2,39             2            1,671          1,296          0,848          0,527          0,254          0,126      
+    120        2,617          2,358           1,98           1,658          1,289          0,845          0,526          0,254          0,126      
+   \>120       2.576          2.326           1.960          1.645          1.282          0.842          0.524          0.253          0.126      
+  ------- --------------- -------------- --------------- -------------- -------------- -------------- -------------- -------------- -------------- --
+:::

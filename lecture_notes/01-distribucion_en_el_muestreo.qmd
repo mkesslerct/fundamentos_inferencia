@@ -20,6 +20,7 @@ Para contestar a esta pregunta debemos procurar estudiar la variabilidad muestra
 
 Una manera de realizar este estudio de la variabilidad muestral es a través de simulaciones realizadas con el ordenador. Podemos simular la extracción repetida de muestras de tamaño 20000 de una población. Supongamos por ejemplo, que consideramos la retransmisión en España de la final de la copa del Mundo 2022 que consiguió una cuota de casí 70%, entre los 17000000 espectadores en ese momento, fuente  [noticia en rtve.es](https://www.rtve.es/rtve/20221219/audiencias-gran-final-mundial-catar/2412248.shtml). Supongamos que la proporción de espectadores que vieron la final fue realmente 0. 7. Vamos a definir un vector con 17000000 elementos de los cuales el 70%, es decir 11900000, son "1"s, y el 30%, es decir 5100000, son "0"s. Este vector representará la "población" de todos los espectadores en este momento. Los "1"s representan las personas que vieron la final por la tele.  Escogeremos al azar una muestra de 20000 elementos entre los elementos del vector población y calcularemos la proporción de "1"s en esta muestra. Comprobaremos si está cerca de la proporción de "1"s en la población, que vale 0.7.
 ```{r}
+#| echo: true
 poblacion = c(rep(1, 11900000), rep(0, 5100000))
 set.seed(314159)
 p_muestra =  mean(sample(poblacion, 20000, replace = FALSE))
@@ -36,6 +37,7 @@ Para esta muestra concreta, la proporción muestral de "1"s es muy próxima a la
 Para convencernos de que este buen comportamiento es lo esperable para muestras de este tamaño, vamos a repetir muchas veces (10000 veces por ejemplo), la extracción de una muestra de 20000 personas en la población. Para hacerlo, podríamos repetir el código anterior en un bucle `for`, pero vamos a aprovechar la librería `purrr` del "tidyverse", que permite aplicar una función a los elementos de una lista o de un vector. 
 
 ```{r}
+#| echo: true
 library(purrr)
 p_muestras = map_dbl(
     1:10000,
@@ -60,6 +62,7 @@ hist(
     xlim = c(0.6, 0.8)
 )
 ```
+
 Comprobamos en el histograma que todas las muestras simuladas llevan a una estimación de la proporción muy próxima a la proporción poblacional. De hecho, `r round(100 * ((fdae <- ecdf(p_muestras))(0.71) - fdae(0.69)), 1)`% de las muestras presentan un error menor de 1 punto respecto al valor poblacional y `r round(100 * ((fdae <- ecdf(p_muestras))(0.705) - fdae(0.695)), 1)`% de las muestras un error menor que medio punto.
 
 En conclusión, este estudio de simulación nos lleva a tener confianza en la precisión de nuestra estimación si extraemos una muestra de 20000 personas para aproximar la proporción en una población de 17000000 personas. En este tema exploraremos esta misma idea de estudiar la "distribución en el muestreo" no solamente a través de simulaciones sino gracias a la obtención de resultados teóricos manipulando probabilidades. 
@@ -79,7 +82,6 @@ Sea una distribución $f$. Consideramos $n$ variables aleatorias independientes 
 :::
 
 Decimos que las variables $X_1, X_2, \ldots, X_n$ son independientes e identícamente distribuidas, lo que se abrevia como i.i.d. 
-\end{definition}
 
 *Nota:* Por la propiedad de independencia, si $f$ es una función de densidad y $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, la función de densidad conjunta de la muestra es el producto de las marginales: 
 $$f_{X_1, X_2, \ldots, X_n}(x_1, x_2, \ldots, x_n) = f(x_1)\cdot f(x_2)\cdot \cdots \cdot f(x_n).$$
@@ -101,14 +103,12 @@ $$\mathbb{P}(X_i = 1) = \frac {N_S - \sum_{1\leq j< i}x_j} {N - (i - 1)}.$$
 Sin duda, entre las cantidades más relevantes asociadas a una muestra destaca la media muestral. Empezaremos por lo tanto por estudiar qué podemos decir sobre su distribución muestral, es decir la distribución de los valores que puede tomar respecto a todas las muestras que se podrían extraer. Como primer paso, la obtención de su esperanza y varianza es sencilla y nos proporciona información valiosa sobre su centro y su dispersión:
 
 ::: {#prp-espvarxbar}
-Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, que admite tiene esperanza y varianza, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
+Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, que tiene esperanza y varianza, consideramos su media $\bar{X}_n =\frac 1 n \sum_{i = 1, \ldots, n} X_i$, se cumple:
 
 - Si $\mu_f$ es la esperanza de la distribución $f$, 
   $$\mathbb{E}(\bar{X}_n)=  \mu_f.$$
 - Si $\sigma_f^2$ es la varianza de la distribución $f$, 
   $$Var(\bar{X}_n)=  \sigma_f^2/n.$$
-- Si $\varphi_f$ denota la función característica de $f$, es decir $\forall t$, $\varphi_f(t)= \mathbb{E}[e^{itX}]$ donde $X$ es una variable con distribución $f$,
-$$ \varphi_{\bar{X}_n}(t)=\mathbb{E}[e^{it\bar{X}_n}]=\left(\varphi_f(t/n)\right)^n.$$ {#eq-caracteristica-suma}
 :::
 
 ::: {.proof}
@@ -123,14 +123,14 @@ La esperanza de $\bar{X}$ se obtiene usando la propiedad de linealidad de la esp
 
 ![Analogía de la medición con una diana](./figures/dianas.jpg){#fig-diana}
 
-## Varianza muestral
+## Varianza muestral {#sec-varmuestral}
 Como medida de la dispersión de una muestra, es útil considerar la varianza muestral que definimos a continuación:
 
 ::: {#def-varianzamuestral}
 Si $(X_1, X_2, \ldots, X_n)$ es una muestra aleatoria simple de $f$, definimos la varianza muestral $S_n^2$ como
 $$ S_n^2 = \frac 1 {n - 1} \sum_{i = 1}^n \left(X_i - \bar{X}_n\right)^2.$$
 Es sencillo demostrar la fórmula alternativa para $S_n^2$:
-$$S_n^2 = \frac n {n - 1} \left(\bar{X^2}_n - (\bar{X}_n)^2\right),$$ 
+$$S_n^2 = \frac n {n - 1} \left(\overline{X^2}_n - (\bar{X}_n)^2\right),$$ 
 donde $\overline{X^2}_n= \frac 1 n \sum_{1\leq i \leq n} X_i^2$ es la media de los cuadrados de los valores de la muestra. 
 :::
 Antes de obtener la distribución de la varianza muestral en el caso de una distribución normal, podemos obtener su esperanza, para cualquier distribución $f$ con varianza finita. 
@@ -157,7 +157,7 @@ Obtenemos en consecuencia que
 
 Deducimos de la @prp-espvar que el centro de los valores de la distribución de la varianza muestral coincide con la varianza de $f$, que llamamos también la varianza "poblacional".
 
-## Distribución de la media y de la varianza muestrales para una m.a.s de una distribución normal.
+## Distribución de la media y de la varianza muestrales para una m.a.s de una distribución normal. {#sec-xbarnormal}
 
 
 En las secciones anteriores, hemos caracterizado la esperanza y la varianza de la distribución de los valores de la media muestral $\bar{X}_n$ así como la esperanza de la varianza muestral $S^2_n$. Es destacable el hecho de que estos resultados se obtienen sin hipótesis sobre la forma de la distribución $f$ de $X$. ¿Podemos decir algo más sobre la distribución de estos estadísticos si asumimos un modelo concreto para $f$? En el caso en que hemos modelizado la v.a $X$ por una distribución Normal $\mathcal{N} (\mu,\sigma^2)$ somos capaces de caracterizar con detalles la distribución muestral de $\bar{X}_n$ y de $S^2_n$, e incluso obtener un resultado sobre su distribución conjunta. La siguiente proposición establece resultados de gran importancia para la teoría de la inferencia.
@@ -184,7 +184,7 @@ Por otra parte, calculemos la covarianza de $\bar{X}_n$ con cualquier $X_i - \ba
 \end{align*}
 Al ser las variables $X_1, \ldots, X_n$ independientes,  $\mathbb{E}[(X_i - \mu)(X_j - \mu)] = 0$ excepto cuando $i=j$, en cuyo caso, es igual a la varianza de $X_i$, es decir $\sigma^2$. Concluimos que $cov(\bar{X}_n, X_i - \bar{X}_n) = 0$ para todo $i = 1, \ldots, n$. Puesto que todas estas variables son variables normales, deducimos que $\bar{X}_n$ es independiente de $X_i - \bar{X}_n$ para todo $i = 1, \ldots, n$ y, por lo tanto, independiente de cualquier función de $X_1 - \bar{X}_n, \ldots, X_n - \bar{X}_n$, en particular de $S_n^2$. Esto demuestra el punto 1.
 
-Para demostrar el punto 3., procederemos por inducción sobre $n$. Recordemos que el cuadrado de una variable normal estándar es una ji-cuadrado con 1 grado de libertad, y que la suma de $k$ variables ji-cuadrado independientes con $g_1, \ldots, g_k$ grados de libertad sigue una distribución ji-cuadrado con $g_1+\hdots+g_k$ grados de libertad.
+Para demostrar el punto 3., procederemos por inducción sobre $n$. Recordemos que el cuadrado de una variable normal estándar es una ji-cuadrado con 1 grado de libertad, y que la suma de $k$ variables ji-cuadrado independientes con $g_1, \ldots, g_k$ grados de libertad sigue una distribución ji-cuadrado con $g_1+\ldots+g_k$ grados de libertad.
 
 Consideremos $n = 2$. Tenemos que 
 $$S_2^2/\sigma^2 = \frac 1 {\sigma^2}\left((X_1 - \frac {X_1 + X_2} 2)^2 +(X_2 - \frac {X_1 + X_2} 2)^2 \right)= \frac 1 {2\sigma^2} (X_1 - X_2)^2.$$
@@ -209,13 +209,13 @@ Para establecer @eq-recursionSn, desarrollamos $S_n^2$:
 
 Hemos usado $\sum_{i =1}^{n-1}(X_i -\bar{X}_{n-1})=0$ y $\bar{X}_n =\frac {(n-1) \bar{X}_{n - 1}} n + \frac {X_n} n$.
 
-Al ser $X_n$ y $\bar{X_{n-1}}$ variables normales independientes, deducimos que $(\frac {n-1} {\sigma n} (X_n - \bar{X}_{n-1}))$ es una normal estándar, por lo que su cuadrado es una ji-cuadrado con 1 grado de libertad. Es independiente de $\bar{X}_{n-1}$, por el punto 2, y por la hipótesis de inducción, $(n - 2)S^2_{n-1}/\sigma^2\sim \chi^2_{n-2}$. Por la propiedad de sumas de variables ji-cuadrado independientes, deducimos que $(n - 1)S_n^2/ \sigma^2\sim \chi^2_{n-1}$, lo que completa la demostración por inducción del punto 3.
+Al ser $X_n$ y $\bar{X}_{n-1}$ variables normales independientes, deducimos que $\frac 1 \sigma \frac {n-1} n (X_n - \bar{X}_{n-1})$ es una normal estándar, por lo que su cuadrado es una ji-cuadrado con 1 grado de libertad. Es independiente de $\bar{X}_{n-1}$, por el punto 2, y por la hipótesis de inducción, $(n - 2)S^2_{n-1}/\sigma^2\sim \chi^2_{n-2}$. Por la propiedad de sumas de variables ji-cuadrado independientes, deducimos que $(n - 1)S_n^2/ \sigma^2\sim \chi^2_{n-1}$, lo que completa la demostración por inducción del punto 3.
 :::
 
 En una subsección posterior, veremos que este resultado es válido asíntoticamente (cuando $n$ tiende hacia $+\infty$), para una clase muy grande de distribuciones $f$ de $X$.
 
 ## Distribución t de Student
-Las distribuciones y los resultados obtenidos en la @prp-espvarxbar son esenciales cuando nuestro modelo consiste en una distribucíon normal. El resultado @eq-xbarestandar en particular será la base para construir en temas posteriores una estimación de la media "poblacional" $\mu$ que incluya un margen de error. Sin embargo, esta fórmula comprende dos parámetros a priori desconocidos, $\mu$ y $\sigma$. Para centrarnos en $\mu$ es natural sustituir en ella $\sigma$ por el valor de la desviación típica de la muestra $S_n$. Es lo que hizo Gosset a principios del siglo XX, obteniendo la densidad resultante y publicando el resultado bajo el seudónimo de "Student".
+Las distribuciones y los resultados obtenidos en la @prp-espvarxbar son esenciales cuando nuestro modelo consiste en una distribucíon normal. La  @eq-xbarestandar en particular será la base para construir en temas posteriores una estimación de la media "poblacional" $\mu$ que incluya un margen de error. Sin embargo, esta fórmula comprende dos parámetros a priori desconocidos, $\mu$ y $\sigma$. Para centrarnos en $\mu$ es natural sustituir en ella $\sigma$ por el valor de la desviación típica de la muestra $S_n$. Es lo que hizo Gosset a principios del siglo XX, obteniendo la densidad resultante y publicando el resultado bajo el seudónimo de "Student".
 
 ::: {#prp-tstud}
 Consideramos $(X_1,\ldots,X_n)$ una muestra aleatoria simple de una distribución $\mathcal{N}(\mu,\sigma^2)$, sea $\bar{X}$ la media muestral, la distribución de los valores de 
@@ -246,7 +246,7 @@ donde $\Gamma$ denota la función Gamma.[^1]
 ::: {.proof}
 Vamos a demostrar que $T=\frac{\bar{X}-\mu}{S/\sqrt{n}}$ tiene por densidad la expresión dada en la @eq-densstud. Para ello, introducimos las dos variables $Z = (\bar{X}_n - \mu)/\sqrt{\sigma/n}$ que sigue una distribución normal estándar y $Y =  (n-1)S_n^2/\sigma^2$ que sigue una distribución ji-cuadrado con $n-1$ grados de libertad. Tenemos que $T = Z/\sqrt{Y/(n-1)}$. Como son independientes, la densidad conjunta de $Z$ y $Y$ es el producto de sus densidades:
 $$ f_{Z, Y}(z, y) = \frac 1 {\sqrt{2\pi}} e^{-z^2/2}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} y^{(n - 1)/2 - 1} e^{- y/2}, \quad -\infty<z<\infty,\ 0<y<\infty.$$
-Sea $\Phi$ la aplicación que transforma $(Z, Y)$  en $(T, Y)$, $\Phi(z, y) = (z/\sqrt{y/(n - 1)}, y)$. Se trata de un difeormorphismo de $\mathbb{R} \times\mathbb{R}^+$ a  $\mathbb{R} \times\mathbb{R}^+$. Deducimos que la densidad conjunta de $(T, Y)$ es 
+Sea $\Phi$ la aplicación que transforma $(Z, Y)$  en $(T, Y)$, $\Phi(z, y) = (z/\sqrt{y/(n - 1)}, y)$. Se trata de un difeormorfismo de $\mathbb{R} \times\mathbb{R}^+$ a  $\mathbb{R} \times\mathbb{R}^+$. Deducimos que la densidad conjunta de $(T, Y)$ es 
 $$f_{T, Y}(t, y) = f_{Z, Y}(\Phi^{-1}(t, y))\frac 1 {J\Phi(\Phi^{-1}(t, y))},$$
 donde $J\Phi$ es el determinante Jacobiano de $\Phi$. Tenemos que $J\Phi(z, y) = \frac 1 {\sqrt{y/(n -1)}}$, por lo que
 $$ f_{T, Y}(t, y) = \frac 1 {\sqrt{2\pi}} e^{-\frac {t^2 y}{2(n-1)}}\frac 1 {\Gamma(\frac{n - 1} 2) 2^{(n -  1)/2}} y^{(n - 1)/2 - 1} e^{- y/2}\sqrt{y/(n-1)}, \quad -\infty<t<\infty,\ 0<y<\infty.$$
@@ -259,9 +259,29 @@ $$f_{T}(t) = \frac 1 {\sqrt{\pi(n-1)}} \frac {\Gamma(n/2)} {\Gamma(\frac{n - 1} 
 :::
 La distribución de $T$ depende por lo tanto del tamaño $n$ de la muestra, a través de los llamados ``grados de libertad''.
 
-La distribución t tiene colas más pesadas que la distribución Normal, lo que es intuitivamente natural puesto que, al obtenerse $T$ sustituyendo $\sigma$ por $S$, el denominador de $T$ presenta ahora también variabilidad. Esta variabilidad en el denominador resulta en que $T$ puede tomar con más probabilidad valores más extremos. Sin embargo, si los grados de libertad aumentan, la variabilidad de $S$ disminuye, y la distribución t de Student asociada se parece más a una Normal. En la @fig-densidad-student, están representadas la densidad de la distribución t de Student para varios valores del paramétro de grados de libertad.
+La distribución t tiene colas más pesadas que la distribución Normal, lo que es intuitivamente natural puesto que, al obtenerse $T$ sustituyendo $\sigma$ por $S$, el denominador de $T$ presenta ahora también variabilidad. Esta variabilidad en el denominador resulta en que $T$ puede tomar con más probabilidad valores más extremos. Sin embargo, si los grados de libertad aumentan, la variabilidad de $S$ disminuye, y la distribución t de Student asociada se parece más a una Normal. En la @fig-densidad-student, está representada la densidad de la distribución t de Student para varios valores del paramétro de grados de libertad.
 
-![Densidad de la distribución t de Student para varios valores de los grados de libertad](figures/densidad_student.pdf){#fig-densidad-student}
+
+```{r}
+#| label: fig-densidad-student
+#| fig-cap: Densidad de la distribución t de Student para varios valores de los grados de libertad
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(purrr)
+library(ggplot2)
+
+df = c(1, 3, 10, 30, 150)
+x <- seq(-6, 6, by = 0.01)
+densidad <- map_dfr(df, ~ data.frame(x = x, y = dt(x, df = .), df = .))
+
+densidad |>
+    ggplot(aes(x, y, col = factor(df))) +
+    geom_line() +
+    labs(x = "t", y = expression(paste(f[g],"(t)"))) +
+    scale_color_discrete(name = "Grados de libertad (g)") +
+    theme_bw()
+```
 
 ## Distribución F de Snedecor para el cociente de varianzas.
 Otra distribución muy importante en las aplicaciones está asociada al cociente de variables ji-cuadrado independientes y se utiliza por lo tanto para comparar varianzas muestrales correspondientes a variables diferentes o a grupos diferentes. Se llama la distribución $F$ de Snedecor y la introducimos en la siguiente definición.
@@ -269,7 +289,8 @@ Otra distribución muy importante en las aplicaciones está asociada al cociente
 ::: {#prp-F-Snedecor}
 Consideremos $U_1$ y $U_2$ dos variables independientes de distribución ji-cuadrado con $p_1$ y $p_2$ grados de libertad respectivamente. El cociente $F = \frac {U_1/p_1}{U_2/p_2}$ admite la densidad
 $$f_F(x) =  \frac {\Gamma(\frac {p_1 + p_2} 2)}{\Gamma(p_1)\Gamma(p_2)}(\frac{p_1}{p_2})^{p_1}\frac{x^{p_1/2-1}}{(1+ \frac {p_1}{p_2} x)^{\frac{p_1+p_2} 2}}.$${#eq-def-F}
-Esta distribución se llama F de Snedecor con $p_1$ y $p_2$ grados de libertad y se denota $F_{p_1, p_2}$.
+Esta distribución se llama F de Snedecor con $p_1$ y $p_2$ grados de libertad y  escribimos $F \sim F_{p_1, p_2}$.
+
 :::
 
 :::{.proof}
@@ -278,6 +299,6 @@ Para obtener la densidad del cociente que nos interesa, procedemos como para la 
 
 
 
-Consideremos dos variables aleatorias normales $X$ e $Y$ con varianzas $\sigma_2^X$ y $\sigma_2^Y$, así como $X_1, \ldots, X_{n_1}$ y $Y_1, \ldots, Y_{n_2}$ dos muestras aleatorias simples de $X$ y $Y$ respectivamente. Por la @prp-F-Snedecor sabemos que
+Consideremos dos variables aleatorias normales $X$ e $Y$ con varianzas $\sigma_2^X$ y $\sigma_2^Y$, así como $X_1, \ldots, X_{n_1}$ y $Y_1, \ldots, Y_{n_2}$ dos muestras aleatorias simples de $X$ y $Y$ respectivamente. Una consecuencia de la @prp-F-Snedecor es que
 $$\frac{(n_1-1)S_{n_1}^X/\sigma_X^2}{(n_2-1)S_{n_2}^Y/\sigma_Y^2}\sim F_{n_1-1, n_2-1}.$$
 
