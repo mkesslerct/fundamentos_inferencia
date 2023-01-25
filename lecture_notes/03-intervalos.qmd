@@ -1,9 +1,6 @@
 # Estimación por intervalos
 
-No queremos limitarnos a dar un valor para aproximar un parámetro sino
-proporcionar también una medida del error que pensamos cometer. Para
-ello, calcularemos un intervalo en él que pensamos que se encuentra el
-parámetro.
+En el contexto de la estimación paramétrica, no queremos limitarnos a dar un valor para aproximar un parámetro sino un intervalo que lo capture con una cierta garantía. De esta forma, tendremos un cierto control sobre el riesgo de equivocarnos y proporcionar un intervalo que no contenga el parámetro buscado. La estimación por intervalo se expresa a menudo a través del margen de error cometido en la estimación, que siempre está asociado a la confianza o el riesgo que estamos dispuesto a asumir. 
 
 ## Idea básica
 
@@ -14,8 +11,7 @@ tamaño 4, y estimo $\mu$ por el valor de $\bar{X}$. Por la @prp-distxbar en la 
 $\mathcal{N}(\mu,\sigma^2/n)$ es decir $\mathcal{N}(\mu,1)$. Por la
 propiedad de la distribución Normal, deducimos que el 95% de las muestras
 proporcionan un valor de $\bar{X}$ que se encuentra a menos de 2
-unidades de la media $\mu$.
-
+unidades de la media $\mu$.  
 Invertamos ahora la situación: sé donde está $\bar{X}$, ¿donde está
 $\mu$? Por la misma regla, se encuentra, para el 95% de las muestras, a
 menos de 2 unidades de $\bar{X}$, es decir que $\mu$ se encuentra en el
@@ -23,25 +19,60 @@ intervalo $[\bar{X}-2,\bar{X}+2]$. Dicho de otra manera, para el 95% de
 las muestras, el intervalo aleatorio $[\bar{X}-2,\bar{X}+2]$ captura el
 valor del parámetro $\mu$.
 
+## Intervalo de estimación
+:::{#def-intervalo-estimacion}
+Si $(X_1,\ldots, X_n)$ una muestra asociada a una distribución $f_\theta$. Un intervalo de estimación está formado por dos estadísticos $I(X_1,\ldots, X_n)$ (extremo inferior) y $D(X_1,\ldots, X_n)$ (extremo superior) y persigue capturar el valor del parámetro $\theta$.
+:::
+
+:::{.callout-important}
+## Un intervalo de estimación es **aleatorio**
+Al estar formado por dos estadísticos, el intervalo de estimación es aleatorio, sus extremos dependen de la muestra concreta escogida. La expresión 
+$$\theta\in \left[I(X_1,\ldots, X_n), D(X_1,\ldots, X_n)\right]$$
+define un suceso aleatorio. La probabilidad de este suceso 
+$$\mathbb{P}\left[\theta\in [I(X_1,\ldots, X_n), D(X_1,\ldots, X_n)]\right]$${#eq-nivel-cobertura}
+puede variar según el valor de $\theta$ y se llama el *nivel de cobertura* del intervalo para este valor de $\theta$.
+:::
+
+:::{#def-nivel-confianza}
+Para un  intervalo de estimación, el nivel de confianza es el valor mínimo del nivel de cobertura calculado cuando varía $\theta$.  
+:::
+
+Es obvio que nos interesa conseguir un intervalo de estimación que tenga un gran nivel de confianza, es decir que nos garantice que, sea cual sea el valor del parámetro, la probabilidad de que lo capture es alta. Sin embargo, esta confianza no debe conseguirse en base a una gran amplitud del intervalo: un intervalo amplísimo puede tener un nivel de cobertura muy grande pero no tendrá ningún interés práctico.
+
+:::{.callout-important}
+## Se debe encontrar un equilibrio
+Un intervalo de estimación será óptimo cuando presentará la menor amplitud para un nivel de confianza fijado.
+:::
+
+## Un procedimiento general de construcción.
+Existen diferentes procedimientos para construir intervalos de estimación. El descrito a continuación se aplica en muchas situaciones de modelización.  
+
+-   Nos fijamos el llamado "nivel de riesgo", $\alpha$ un número entre 0
+    y 1.  
+    Los valores más utilizados de $\alpha$ son $0.1$, $0.05$, y $0.01$,
+    lo que corresponde con niveles de confianza del $90\%$ ,$95\%$ y
+    $99\%$ respectivamente.
+- Buscamos un estadístico $T(X_1,\ldots, X_n;\theta)$ que sea *pivotal*, es decir un estadístico cuya distribución no depende del paramétro desconocido $\theta$. Como ejemplo en el caso de una m.a.s de una distribución $\mathcal{N}(\mu, \sigma^2)$ donde solamente $\mu$ sea desconocido y disponemos de un valor razonable para $\sigma^2$, un estadístico pivotal sería $\bar{X}_n - \mu$ cuya distribución en el muestreo es $\mathcal{N}(0, \sigma^2)$ que no depende del parámetro desconocido.
+- Escogemos dos cotas $a$ y $b$ que encierren una región de probabilidad $1-\alpha$ en la distribución de $T$:
+$$ \mathbb{P}_\theta\left( a\leq T(X_1,\ldots, X_n;\theta)\leq b\right) = 1 - \alpha,\quad \forall \theta.$$
+- Procuramos despejar $\theta$ de la expresión:
+$$\mathbb{P}_\theta\left(a\leq T(X_1,\ldots, X_n;\theta)\leq b\right)= 1 - \alpha, $$
+para encontrar de manera equivalente
+$$\mathbb{P}_\theta\left(I(X_1,\ldots, X_n)\leq \theta\leq D(X_1,\ldots, X_n)\right)= 1 - \alpha.$$
+Puesto que se ha usado un estadístico pivotal, el nivel de cobertura $1 - \alpha$ del intervalo $[I( X_1,\ldots, X_n), D(X_1,\ldots, X_n)]$ no depende de $\theta$ por lo que es también el nivel de confianza. Por ello, hablamos de "intervalo de confianza". A menudo el nivel de confianza se expresa en porcentaje.
+
 ## Intervalo de confianza para la media $\mu$ de una distribución Normal con varianza conocida
 
 ### Construcción
 
-Consideramos la variable $X\sim\mathcal{N}(\mu,\sigma^2)$. Suponemos que
+Consideramos una m.a.s de una distribución $X\sim\mathcal{N}(\mu,\sigma^2)$. Suponemos que
 conocemos el valor de $\sigma^2$. La construcción del intervalo de
 confianza para la media $\mu$ se realiza siguiendo los siguientes pasos.
 
--   Nos fijamos el llamado "nivel de riesgo", $\alpha$ un número entre 0
-    y 1. La cantidad $1-\alpha$ expresada en porcentaje se llama **nivel
-    de confianza**.\
-    Los valores más utilizados de $\alpha$ son $0.1$, $0.05$, y $0.01$,
-    lo que corresponde con niveles de confianza del $90\%$ ,$95\%$ y
-    $99\%$ respectivamente.
 
--   Escogemos el estadístico $\bar{X}$ para estimar $\mu$. Su
-    distribución en su forma tipificada es
-    $$\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1).$$ Para
-    $0\leq u\leq 1$, utilizamos la notación $z_u$ para denotar el
+-   Escogemos el estadístico $\bar{X}$ para estimar $\mu$. Es fácil identificar un estadístico pivotal en base a $\bar{X}$:
+$$T(X_1,\ldots, X_n;\theta) = \frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1).$$ 
+Para $0\leq u\leq 1$, utilizamos la notación $z_u$ para denotar el
     cuantil $u$ de la distribución Normal estándar, es decir el valor
     que cumple $\mathbb{P}(Z\leq z_u)=u$, o dicho de otra manera, el valor que
     deja a su izquierda un área igual a $u$ debajo de la curva de la
@@ -53,14 +84,14 @@ confianza para la media $\mu$ se realiza siguiendo los siguientes pasos.
     $t$. Encontramos $z_{0.95}=1.64$, $z_{0.975}=1.96$ y
     $z_{0.995}=2.56$.
 
--   Dibujo en la densidad del estadístico
+-   Dibujamos en la densidad del estadístico pivotal
     $\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}$, una región central que
     represente el $100(1-\alpha)\%$ del área total, tal como viene
     ilustrado en la figura siguiente
 
     ```{r}
     #| label: fig-densidad-estadistico-Z
-    #| fig-cap: Región central con un área $\alpha$ en la densidad de una Normal estándar. 
+    #| fig-cap: Región central con un área $1 - \alpha$ en la densidad de una Normal estándar. 
     #| warning: false
     #| fig-width: 10
     #| fig-height: 7
@@ -124,21 +155,49 @@ me equivoque. Sin embargo, esta probabilidad $\alpha$, el riesgo de
 equivocarme, se fija en general bastante pequeño, por ejemplo
 $\alpha=0.05$.
 
-Para ilustrar esta interpretación, he simulado 20 veces el proceso de
+Para ilustrar esta interpretación, se simulan 20 veces el proceso de
 extraer una muestra de tamaño 4 de una distribución
-$X\sim \mathcal{N}(\mu_X,1)$. He representado en la Figura
-@fig-ics en el eje Ox
+$X\sim \mathcal{N}(\mu,1)$. Se representan en la @fig-intervalos en el eje Ox
 el número de la muestra y en el eje Oy el intervalo de confianza
 asociado. Además una línea horizontal representa el valor de $\mu$ que
 se pretende estimar, en este caso $\mu=2$. La gran mayoría de los
 intervalos capturan el valor correcto de $\mu$, pero hay un intervalo,
-el correspondiente a la muestra número 13 que no lo hace: este intervalo
+el correspondiente a la muestra número 10 que no lo hace: este intervalo
 es erróneo, y esta muestra forma parte del 5% de las muestras "malas",
 es decir las que proporcionan intervalos equivocados.
 
-![Los intervalos de confianza al 95% correspondientes a 20 muestras de
-tamaño 4. La media que se busca estimar es $\mu=2$.](figures/ics.png){#fig-ics
-width="8cm"}
+```{r}
+#| label: fig-intervalos
+#| fig-cap: Los intervalos de confianza al 95% correspondientes a 20 muestras de tamaño 4. La media que se busca estimar es $\mu=2$.
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+
+library(tidyverse)
+set.seed(314159)
+n <- 20
+mu <- 2
+sigma <- 1
+sample_means <- tibble(
+    sample = 1:n,
+    xbar = rnorm(n, mean = mu, sd = sigma / sqrt(n))
+)
+alpha <- 0.05
+sample_means %>%
+    ggplot(aes(x = sample, y = xbar)) +
+    geom_hline(yintercept = mu) +
+    geom_point(size = 3) +
+    geom_errorbar(
+        aes(
+            ymin = xbar - qnorm(1 - alpha / 2) * sigma / sqrt(n), 
+            ymax = xbar + qnorm(1 - alpha / 2) * sigma / sqrt(n),
+        ),
+        width = 0.2,
+        ) +
+    lims(y = c(0, 4)) +
+    labs(x = 'Muestra', y = 'Valores') 
+```
+
 
 #### Ejemplo
 
@@ -166,95 +225,82 @@ $\mu=20.02\pm 0.04$.
 
 ### Comentarios importantes
 
-a\)
+#### Si $X$ no es Normal
 
-:   La construcción del intervalo de confianza está basada en la
+   La construcción del intervalo de confianza está basada en la
     hipótesis de que la distribución de la v.a. $X$ es Normal, puesto
     que utilizamos
     $$\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1).$$ Si
     la distribución de $X$ no es Normal, el intervalo no es válido, es
     decir que no podemos garantizar que la confianza especificada sea
     cierta. Sin embargo, en el caso en que la muestra es grande, podemos
-    recurrir al Teorema Central del Límite, ver
-    [\[tcl\]](#tcl){reference-type="ref" reference="tcl"}, y sabemos que
-    $$\mbox{aproximadamente, }\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1),$$
+    recurrir al Teorema Central del Límite, <!-- ver [\[tcl\]](#tcl){reference-type="ref" reference="tcl"} --> y sabemos que
+   $$\frac {\bar{X}-\mu} {\sigma/\sqrt{n}}\sim \mathcal{N}(0,1),\mbox{aproximadamente, }$$
     lo que posibilita que los intervalos sean aproximadamente válidos:
     la confianza especificada no será exacta pero casi\...
-
     ¿A partir de cuantas observaciones consideramos una muestra como
     grande? No hay respuesta universal, depende mucho de lo alejado que
     está la distribución de $X$ de una distribución Normal. En general,
     se suele considerar en práctica que $n\geq 30$ es suficiente para
     que los intervalos construidos sean aproximadamente válidos.
 
-b\)
+#### Factores que afectan a la precisión de la estimación.
+Recordar que en la estimación por un intervalo, el margen de error
+es $\pm z_{1.\alpha/2}\sigma/\sqrt{n}$. Deducimos en particular que  
+-   cuanto mayor sea $n$, más precisa será la estimación, es decir
+    que más pequeño será el intervalo de confianza.
+-   cuanto menor sea $\sigma$, mayor precisión en la estimación.
+-   cuanto mayor sea la confianza, peor será la precisión de la
+    estimación: si queremos garantizar con gran confianza que el
+    intervalo proporcionado captura $\mu$, no hay más remedio que
+    proporcionar un intervalo grande\...
 
-:   Factores que afectan a la precisión de la estimación.\
-    Recordar que en la estimación por un intervalo, el margen de error
-    es $\pm z_{1.\alpha/2}\sigma/\sqrt{n}$. Deducimos en particular que
-
-    -   cuanto mayor sea $n$, más precisa será la estimación, es decir
-        que más pequeño será el intervalo de confianza.
-
-    -   cuanto menor sea $\sigma$, mayor precisión en la estimación.
-
-    -   cuanto mayor sea la confianza, peor será la precisión de la
-        estimación: si queremos garantizar con gran confianza que el
-        intervalo proporcionado captura $\mu$, no hay más remedio que
-        proporcionar un intervalo grande\...
-
-c\)
-
-:   La hipótesis de que $\sigma$ es conocida no es realista: en general
-    también hay que estimarla a partir de la muestra. La distribución
-    del estadístico que resulta de sustituir $\sigma$ por $S$, la
-    desviación típica muestral, $\frac {\bar{X}-\mu} {S/\sqrt{n}}$ es
-    una t de Student con $n-1$ grados de libertad. Podemos repetir los
+####  Si $\sigma$ es desconocida 
+La hipótesis de que $\sigma$ es conocida no es realista: en general
+    también hay que estimarla a partir de la muestra. Tal como vimos en la @prp-tstud, la distribución
+    del estadístico que resulta de sustituir $\sigma$ por la
+    desviación típica muestral $S$, $\frac {\bar{X}-\mu} {S/\sqrt{n}}$ es
+    una t de Student con $n-1$ grados de libertad que también es pivotal. Podemos repetir los
     pasos de construcción del intervalo de confianza para $\mu$
-    basándonos en el estadístico $\frac {\bar{X}-\mu} {S/\sqrt{n}}$:
-
+    basándonos en el estadístico $\frac {\bar{X}-\mu} {S/\sqrt{n}}$:  
     -   Nos fijamos el "nivel de riesgo", $\alpha$.\
-
     -   Escogemos el estadístico
         $$T=\frac{\bar{X}-\mu}{S/\sqrt{n}}\sim t_{n-1}$$
-
     -   Dibujo en la densidad del estadístico $T$ una región central que
         represente el $100(1-\alpha)\%$ del área total, tal como viene
         ilustrado en la figura siguiente
 
 ```{r}
-    #| label: fig-densidad-estadistico-T
-    #| fig-cap: Región central con un área $\alpha$ en la densidad de una t de Student. 
-    #| warning: false
-    #| fig-width: 10
-    #| fig-height: 7
-    library(dplyr)
-    alpha <- 0.05
-    x <- seq(-5, 5, by = 0.01)
-    phi <- dt(x, df = 10)
-    cent <- between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10))  
-    xtalf <- x[cent]
-    phitalf <- phi[cent]
-    vertices.x <- c(xtalf[1], xtalf, xtalf[length(xtalf)])
-    vertices.y <- c(0, phitalf, 0)
-    plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
-    polygon(vertices.x, vertices.y, density=10)
-    axis(
-        1,
-        pos=0,
-        labels=c(
-            "",
-            expression(-t[{n-1}*symbol("\054")*{1-alpha/2}]),
-            "",
-            expression(t[{n-1}*symbol("\054")*{1-alpha/2}]),
-            ""
-        ),
-        at=c(-5, qt(alpha/2, 10), 0, qt(1-alpha/2, 10), 5)
-   )
+#| label: fig-densidad-estadistico-T
+#| fig-cap: Región central con un área $1 - \alpha$ en la densidad de una t de Student. 
+#| warning: false
+#| fig-width: 10
+#| fig-height: 7
+library(dplyr)
+alpha <- 0.05
+x <- seq(-5, 5, by = 0.01)
+phi <- dt(x, df = 10)
+ cent <- between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10))  
+ xtalf <- x[cent]
+ phitalf <- phi[cent]
+ vertices.x <- c(xtalf[1], xtalf, xtalf[length(xtalf)])
+ vertices.y <- c(0, phitalf, 0)
+ plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
+ polygon(vertices.x, vertices.y, density=10)
+ axis(
+     1,
+     pos=0,
+     labels=c(
+         "",
+         expression(-t[{n-1}*symbol("\054")*{1-alpha/2}]),
+         "",
+         expression(t[{n-1}*symbol("\054")*{1-alpha/2}]),
+         ""
+     ),
+     at=c(-5, qt(alpha/2, 10), 0, qt(1-alpha/2, 10), 5)
+)
 ```
-
-
-    -   Deducimos
+-   Deducimos
         $$\mathbb{P}(-t_{n-1,1-\alpha/2}\leq \frac {\bar{X}-\mu} {S/\sqrt{n}}\leq t_{n-1,1-\alpha/2})=1-\alpha,$$
         donde hemos utilizado la notación $t_{n-1,1-\alpha/2}$ para
         denotar el cuantil $1-\alpha/2$ de la distribución $t_{n-1}$, es
@@ -262,11 +308,10 @@ c\)
         izquierda. Los valores de los cuantiles más usados de la
         distribución t están recogidos en una tabla en el apéndice de
         este capítulo.
-
         Despejamos $\mu$ en las desigualdades y obtenemos
         $$\mathbb{P}(\bar{X}-t_{n-1,1-\alpha/2}{S/\sqrt{n}}\leq \mu \leq \bar{X}+ t_{n-1,1-\alpha/2}{S/\sqrt{n}})=1-\alpha.$$
 
-    -   El intervalo de confianza al $100(1-\alpha)\%$ para $\mu$ es
+-   El intervalo de confianza al $100(1-\alpha)\%$ para $\mu$ es
         $$\mu \in [\bar{X}-t_{n-1,1-\alpha/2}{S/\sqrt{n}}; \bar{X}+ t_{n-1,1-\alpha/2}S/\sqrt{n}].$$
         Se escribe también
         $$\mu = \bar{X}\pm t_{n-1,1-\alpha/2}{S/\sqrt{n}},$$ el término

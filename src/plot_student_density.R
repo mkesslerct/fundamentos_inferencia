@@ -6,8 +6,8 @@ pdf(
     width = 10
 )
 par(cex = 1.2)
-x <-seq(-6, 6, by = 0.01)
-y1<- dt(x, df = 1)
+x <- seq(-6, 6, by = 0.01)
+y1 <- dt(x, df = 1)
 y3 <- dt(x, df = 3)
 y10 <- dt(x, df = 10)
 y30 <- dt(x, df = 30)
@@ -36,3 +36,18 @@ legend(
     lwd = rep(2, 4)
 )
 dev.off()
+library(purrr)
+library(ggplot2)
+
+df = c(1, 3, 10, 30, 150)
+x <- seq(-6, 6, by = 0.01)
+densidad <- map_dfr(df, ~ data.frame(x = x, y = dt(x, df = .), df = .))
+
+densidad |>
+    ggplot(aes(x, y, col=factor(df))) +
+    geom_line() +
+    labs(x = "t", y = expression(paste(f[g],"(t)"))) +
+    scale_color_discrete(name = "Grados de libertad (g)")
+           
+
+
