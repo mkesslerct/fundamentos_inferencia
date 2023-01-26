@@ -95,30 +95,31 @@ Para $0\leq u\leq 1$, utilizamos la notación $z_u$ para denotar el
     #| warning: false
     #| fig-width: 10
     #| fig-height: 7
-
-    library(dplyr)
+    library(tidyverse)
     alpha <- 0.05
-    x <- seq(-5, 5, by = 0.01)
-    phi <- dnorm(x)
-    cent <- between(x, qnorm(alpha/2), qnorm(1 - alpha/2))  
-    xzalf <- x[cent]
-    phizalf <- phi[cent]
-    vertices.x <- c(xzalf[1], xzalf, xzalf[length(xzalf)])
-    vertices.y <- c(0, phizalf, 0)
-    plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
-    polygon(vertices.x, vertices.y, density=10)
-    axis(
-        1,
-        pos=0,
-        labels=c(
-            "",
-            expression(-z[{1-alpha/2}]),
-            "",
-            expression(z[{1-alpha/2}]),
-            ""
-        ),
-        at=c(-5, qnorm(alpha/2), 0, qnorm(1-alpha/2), 5)
+    phi  <- tibble::tibble(
+        x = seq(-5, 5, by = 0.01),
+        y = dt(x, df = 10)
     )
+    vertices <- phi %>%
+    filter(between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10)))   
+    phi %>%
+        ggplot(aes(x, y)) +
+        geom_line() +
+        geom_area(data = vertices, alpha = 0.5) +
+        lims(y = c(0, 0.4)) +
+        scale_x_continuous(
+            breaks = c(-5, qnorm(alpha/2), 0, qnorm(1-alpha/2), 5),
+            labels = c(
+                "",
+                expression(-z[{1-alpha/2}]),
+                "",
+                expression(z[{1-alpha/2}]),
+                ""
+            ),
+        ) +
+        ylab("Densidad") +
+        theme(axis.title.x = element_blank(), axis.text.x = element_text(size = 14))
     ```
 
 
@@ -276,29 +277,32 @@ La hipótesis de que $\sigma$ es conocida no es realista: en general
 #| warning: false
 #| fig-width: 10
 #| fig-height: 7
-library(dplyr)
+
+library(tidyverse)
 alpha <- 0.05
-x <- seq(-5, 5, by = 0.01)
-phi <- dt(x, df = 10)
- cent <- between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10))  
- xtalf <- x[cent]
- phitalf <- phi[cent]
- vertices.x <- c(xtalf[1], xtalf, xtalf[length(xtalf)])
- vertices.y <- c(0, phitalf, 0)
- plot(x, phi, type="l", xlab="", ylab="", axes=FALSE)
- polygon(vertices.x, vertices.y, density=10)
- axis(
-     1,
-     pos=0,
-     labels=c(
-         "",
-         expression(-t[{n-1}*symbol("\054")*{1-alpha/2}]),
-         "",
-         expression(t[{n-1}*symbol("\054")*{1-alpha/2}]),
-         ""
-     ),
-     at=c(-5, qt(alpha/2, 10), 0, qt(1-alpha/2, 10), 5)
+phi  <- tibble::tibble(
+    x = seq(-5, 5, by = 0.01),
+    y = dt(x, df = 10)
 )
+vertices <- phi %>%
+   filter(between(x, qt(alpha/2, 10), qt(1 - alpha/2, 10)))   
+phi %>%
+    ggplot(aes(x, y)) +
+    geom_line() +
+    geom_area(data = vertices, alpha = 0.5) +
+    lims(y = c(0, 0.4)) +
+    scale_x_continuous(
+        breaks = c(-5, qt(alpha/2, 10), 0, qt(1-alpha/2, 10), 5),
+        labels=c(
+            "",
+            expression(-t[{n-1}*symbol("\054")*{1-alpha/2}]),
+            "",
+            expression(t[{n-1}*symbol("\054")*{1-alpha/2}]),
+            ""
+        ),
+    ) +
+    ylab("Densidad") +
+    theme(axis.title.x = element_blank(), axis.text.x = element_text(size = 14))
 ```
 -   Deducimos
         $$\mathbb{P}(-t_{n-1,1-\alpha/2}\leq \frac {\bar{X}-\mu} {S/\sqrt{n}}\leq t_{n-1,1-\alpha/2})=1-\alpha,$$
