@@ -1,0 +1,52 @@
+# Simulaciones
+## Generadores de números seudo-aleatorios.
+Todos los lenguages de programación ofrecen funciones o métodos que permiten generar realizaciones de distintas distribuciones de probabilidad, permitiendo simular con el ordenador un comportamiento aparentemente "aleatorio".  
+Para ello usan algoritmos que generan largas secuencia de enteros representados con un determinado número de bits (32 bits, 64 bits, etc...). Estos algoritmos generan lo que llamamos valores que calificamos de seudo-aleatorios, y se basan en relaciones recursivas: para calcular el valor de la secuencia, el algoritmo aplica una transformación a los valores que lo preceden. Aunque hablamos de valores seudo-aleatorios, en realidad, los métodos usados son totalmente deterministas: conociendo el valor inicial y la transformación, es posible reconstruir toda la secuencia. Sin embargo, el comportamiento de los enteros generados imita el de secuencias de números aleatorios e independientes. Si desconocemos la transformación, los valores futuros deben ser impredecibles conociendo solamente los valores pasados. Además las secuencias generadas son tan largas, que en la práctica no aparece ninguna patrón de periodicidad en los números. 
+
+:::{.callout-note }
+- Puesto que la transformación es dada, la secuencia producida está totalmente determinada por la elección de su valor inicial. Este se fija para la generación numérica con ordenador a través de lo que llamamos la semilla. Los lenguages de programación, al invocar las funciones para generar números "aleatorios", usa por defecto una semilla calculada usando el reloj interno del ordenador. Sin embargo el usuario tiene la opción de especificar la semilla. En `R`, por ejemplo, se hace con la función `set.seed`.  Resulta muy útil la posibilidad de fijar la semilla puesto que ofrece la opción, si uno lo desea, de reproducir un conjunto de simulaciones.
+:::
+
+Se han propuesto muchos algoritmos para la generación de números seudo-aleatorios. Entre ellos, se pueden mencionar el de Mersenne-Twister, que es el utilizado por defecto por `R`, o la familia PGC que el utilizado por la librería científica `numpy` de Python. La página [pcg-random.org](https://www.pcg-random.org/) contiene más información sobre estos y otros algoritmos y son numerosos los estudios comparativos sobre sus propiedades.  
+
+:::{.callout-note}
+## Algunas características importantes de un generador:
+- La precisión de cada entero de la secuencia, es decir el número de bits usados en su representación 
+- Su periodicidad: es el número total de elementos que contiene la secuencia antes de volver a encontrar el valor inicial. 
+- Su caracter imprevisible: la dificultad de predecir el siguiente valor a partir de sus predecesores.
+- Su comportamiento ante test estadísticos de uniformidad y de independencia. Entre las baterías de tests más comunes están por ejemplo los de TestU01, que presenta los conjuntos de tests SimpleCrush,  Crush y BigCrush.
+- Su velocidad de computación.
+:::
+
+Como ejemplo, el algoritmo de Mersenne-Twister tiene una periodicidad de $2^{19937}$, un número tan grande que es siquiera imposible imaginarse. En cambio falla en parte de los tests de las baterías de TestU01 Crush y BigCrush, y presenta una cierta predictibilidad, para más detalles ver la página [pcg-random.org](https://www.pcg-random.org/) .
+
+## Simulación de una distribución uniforme.
+Sin duda es esencial ser capaz de generar valores simulados de una distribución uniforme que toma sus valores en $[0, 1]$, en particular porque son el punto de partida de procedimientos para la generación de otras distribuciones de probabilidad.  
+
+:::{.callout-tip}
+## Cómo generar valores flotantes en $[0, 1)$ a partir de enteros seudo-aleatorios
+La mayoría de procedimientos para la generación de valores en $[0, 1)$ se basa en la división de los enteros generados por el entero seudo-aleatorio más grande que puede generar el algoritmo, lo que podemos escribir informalmente como $rand() / RAND\_MAX$, si $rand$ es la función que va generando enteros seudo-aleatorios y $RAND\_MAX$ es el entero más grande que puede producir.
+:::
+
+Insistimos en que la secuencia uniforme generada no es, de ninguna manera, aleatoria. Sin embargo, al producir muestras indistinguibles de un conjunto de realizaciones independientes de una distribución uniforme, nos sirve como tal a efectos de simulación numérica.
+
+En `R`, la función para generar valores de una distribución uniforme es `runif`, que admite como argumentos el número de valores deseados así como los valores extremos del intervalo soporte de la distribución (por defecto 0 y 1). 
+
+```{r}
+#| echo: true
+runif(5)
+```
+
+Si ejecutáis esta misma instrucción, obtendréis valores diferentes, puesto que la semilla ha sido escogido por el ordenador y es diferente de la usada aquí. Sin embargo, sin fijamos la misma semilla, podréis reproducir las mismas simulaciones:
+
+```{r}
+#| echo: true
+set.seed(314159)
+runif(5)
+```
+
+:::{.callout-note}
+El valor concreto de la semilla no es relevante, se suele escoger un valor sencillo de leer o recordar. Algunas personas usan la fecha del día.
+:::
+
+## Simulación de una distribución normal.

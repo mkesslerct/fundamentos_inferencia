@@ -1,4 +1,11 @@
 # Referencias {.unnumbered}
 
 ::: {#refs}
+@book{10.5555/1051451,
+author = {Robert, Christian P. and Casella, George},
+title = {Monte Carlo Statistical Methods },
+year = {2004},
+publisher = {Springer-Verlag},
+address = {New-York, NY}
+}
 :::
